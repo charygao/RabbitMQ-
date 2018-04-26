@@ -44,3 +44,11 @@ In this part of the tutorial we'll write two programs using the spring-amqp libr
 
 下面我们将写两个使用spring-amqp类库的程序；其中一个是发送单条消息的生产者，另一个是消费者，它接收消息并将它们打印出来。我们将掩盖Spring-amqp API的一些细节，专注于即将开始的东西。它就是“Hello World”消息队列。
 
+In the diagram below, "P" is our producer and "C" is our consumer. The box in the middle is a queue - a message buffer that RabbitMQ keeps on behalf of the consumer.
+
+在下面的图中，“P”是我们的生产者，“C”是我们的消费者。图中间的箱子是一个队列，也就是RabbitMQ保存的消息缓存，为了给消费者用：
+
+![](http://www.rabbitmq.com/img/tutorials/python-one.png)
+
+
+
