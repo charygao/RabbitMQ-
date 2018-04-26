@@ -125,3 +125,5 @@ public class Tut1Config {
 
 Note that we've defined the 1st tutorial profile as either tut1, the package name, or hello-world. We use the @Configuration to let Spring know that this is a Java Configuration and in it we create the definition for our Queue \("hello"\) and define our Sender and Receiver beans.
 
+注意，
+
