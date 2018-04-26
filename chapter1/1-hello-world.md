@@ -50,5 +50,13 @@ In the diagram below, "P" is our producer and "C" is our consumer. The box in th
 
 ![](http://www.rabbitmq.com/img/tutorials/python-one.png)
 
+> #### The Spring AMQP Framework
+>
+> RabbitMQ speaks multiple protocols. This tutorial uses AMQP 0-9-1, which is an open, general-purpose protocol for messaging. There are a number of clients for RabbitMQ in many different languages.
+>
+> #### Spring AMQP框架
+>
+> RabbitMQ支持多种协议。本教程使用AMQP 0-9-1协议，它是一个开放，通用的消息队列协议。很多语言都提供了RabbitMQ客户端。
+
 
 
