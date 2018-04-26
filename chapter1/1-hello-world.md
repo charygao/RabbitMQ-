@@ -60,5 +60,5 @@ In the diagram below, "P" is our producer and "C" is our consumer. The box in th
 
 Spring AMQP leverages Spring Boot for configuration and dependency management. Spring supports maven or gradle but for this tutorial we'll select maven with Spring Boot 1.5.2. Open the [Spring Initializr](http://start.spring.io/) and provide: the group id \(e.g. org.springframework.amqp.tutorials\) the artifact id \(e.g. rabbitmq-amqp-tutorials\) Search for the amqp dependency and select the AMQP dependency.
 
-
+Spring AMQP利用Spring Boot来进行配置和依赖管理。Spring同时支持maven或者gradle，但在本教程里我们选择用Spring Boot 1.5.2的maven。我们打开[Spring Initializr](http://start.spring.io/)并提供group id（如org.springframework.amqp.tutorials）和artifact id（如rabbitmq-amqp-tutorials）。查找amqp依赖并选择AMQP依赖。（译者注：应该是搜索rabbitmq）
 
