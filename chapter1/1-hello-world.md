@@ -28,3 +28,5 @@ A _queue_ is the name for a post box which lives inside RabbitMQ. Although messa
 
 ![](http://www.rabbitmq.com/img/tutorials/queue.png)
 
+_Consuming _has a similar meaning to receiving. A _consumer _is a program that mostly waits to receive messages:
+
