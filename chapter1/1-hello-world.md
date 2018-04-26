@@ -90,3 +90,38 @@ tutorial:
 
 Create a new directory \(package - tut1\) where we can put the tutorial code. We'll now create a JavaConfig file \(Tut1Config.java\) to describe our beans in the following manner:
 
+创建一个新的目录（package - tut1）用来放我们的教程代码。现在我们将通过以下方式创建一个Java配置文件（Tut1Config.java）来描述我们的Bean：
+
+```
+package org.springframework.amqp.tutorials.tut1;
+
+import org.springframework.amqp.core.Queue;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+@Profile({"tut1","hello-world"})
+@Configuration
+public class Tut1Config {
+
+    @Bean
+    public Queue hello() {
+        return new Queue("hello");
+    }
+
+    @Profile("receiver")
+    @Bean
+    public Tut1Receiver receiver() {
+        return new Tut1Receiver();
+    }
+
+    @Profile("sender")
+    @Bean
+    public Tut1Sender sender() {
+        return new Tut1Sender();
+    }
+}
+```
+
+Note that we've defined the 1st tutorial profile as either tut1, the package name, or hello-world. We use the @Configuration to let Spring know that this is a Java Configuration and in it we create the definition for our Queue \("hello"\) and define our Sender and Receiver beans.
+
