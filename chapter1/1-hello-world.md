@@ -66,5 +66,13 @@ Generate the project and unzip the generated project into the location of your c
 
 点击Generate Project生成项目，并将其解压到你想存放的目录。现在你可以在你喜欢的IDE里面导入这个项目。你也可以在你喜欢的编辑器上进行下一步编辑。
 
+### Configuring the project
+
+Spring Boot offers numerous features but we will only highlight a few here. First, Spring Boot applications have the option of providing their properties through either an application.properties or application.yml file \(there are many more options as well but this will get us going\). You'll find an application.properties file in the generated project with nothing in it. Rename application.properties to application.yml file with the following properties:
+
+### 配置项目
+
+Spring Boot提供了很多特性，但在这里我们只突出用几个。
+
 
 
