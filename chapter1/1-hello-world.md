@@ -22,7 +22,7 @@ _Producing means nothing more than sending. A program that sends messages is a p
 
 ![](http://www.rabbitmq.com/img/tutorials/producer.png)
 
-_A queue _is the name for a post box which lives inside RabbitMQ. Although messages flow through RabbitMQ and your applications, they can only be stored inside a _queue_. A _queue _is only bound by the host's memory & disk limits, it's essentially a large message buffer. Many _producers _can send messages that go to one queue, and many _consumers _can try to receive data from one _queue_. This is how we represent a queue:
+A _queue _is the name for a post box which lives inside RabbitMQ. Although messages flow through RabbitMQ and your applications, they can only be stored inside a _queue_. A queue is only bound by the host's memory & disk limits, it's essentially a large message buffer. Many producers can send messages that go to one queue, and many consumers can try to receive data from one _queue_. This is how we represent a queue:
 
-一个队列就是一个存在RabbitMQ内部的邮箱的名字。
+一个队列就是一个存在RabbitMQ内部的邮箱的名字。虽然消息在传递时会通过RabbitMQ以及你的应用，但它们只能被存储在一个队列里。
 
