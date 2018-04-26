@@ -16,11 +16,13 @@ RabbitMQ, and messaging in general, uses some jargon.
 
 RabbitMQ，一般称它为消息队列，使用了一些术语。
 
-_Producing _means nothing more than sending. A program that sends messages is a _producer_:
+_Producing means nothing more than sending. A program that sends messages is a producer_:
 
 消息生产其实就是消息发送。发送消息的程序就是一个生产者：
 
 ![](http://www.rabbitmq.com/img/tutorials/producer.png)
 
+_A queue _is the name for a post box which lives inside RabbitMQ. Although messages flow through RabbitMQ and your applications, they can only be stored inside a _queue_. A _queue _is only bound by the host's memory & disk limits, it's essentially a large message buffer. Many _producers _can send messages that go to one queue, and many _consumers _can try to receive data from one _queue_. This is how we represent a queue:
 
+一个队列就是一个存在RabbitMQ内部的邮箱的名字。
 
