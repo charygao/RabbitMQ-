@@ -58,5 +58,7 @@ In the diagram below, "P" is our producer and "C" is our consumer. The box in th
 >
 > RabbitMQ支持多种协议。本教程使用AMQP 0-9-1协议，它是一个开放，通用的消息队列协议。很多语言都提供了RabbitMQ客户端。
 
+Spring AMQP leverages Spring Boot for configuration and dependency management. Spring supports maven or gradle but for this tutorial we'll select maven with Spring Boot 1.5.2. Open the [Spring Initializr](http://start.spring.io/) and provide: the group id \(e.g. org.springframework.amqp.tutorials\) the artifact id \(e.g. rabbitmq-amqp-tutorials\) Search for the amqp dependency and select the AMQP dependency.
+
 
 
