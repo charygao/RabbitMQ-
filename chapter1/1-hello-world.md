@@ -92,7 +92,7 @@ Create a new directory \(package - tut1\) where we can put the tutorial code. We
 
 创建一个新的目录（package - tut1）用来放我们的教程代码。现在我们将通过以下方式创建一个Java配置文件（Tut1Config.java）来描述我们的Bean：
 
-```
+```java
 package org.springframework.amqp.tutorials.tut1;
 
 import org.springframework.amqp.core.Queue;
@@ -126,4 +126,50 @@ public class Tut1Config {
 Note that we've defined the 1st tutorial profile as either tut1, the package name, or hello-world. We use the @Configuration to let Spring know that this is a Java Configuration and in it we create the definition for our Queue \("hello"\) and define our Sender and Receiver beans.
 
 注意，我们已经将教程的第一个配置文件定义为tu1，或者hello-world。我们用@Configuration注解来让Spring知道这是个Java配置，并且在配置里我们创建了Queue\("hello"\)的定义，而且也定义了我们的发送者和接收者。
+
+We will run all of our tutorials through the Boot Application now by simply passing in which profiles we are using. To enable this we will modify the generated RabbitAmqpTutorialsApplication.java with the following:
+
+现在我们将传入将要用的配置文件Boot Application来运行我们的教程
+
+```java
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+@SpringBootApplication
+@EnableScheduling
+public class RabbitAmqpTutorialsApplication {
+
+    @Profile("usage_message")
+    @Bean
+    public CommandLineRunner usage() {
+        return new CommandLineRunner() {
+
+            @Override
+            public void run(String... arg0) throws Exception {
+                System.out.println("This app uses Spring Profiles to 
+                    control its behavior.\n");
+                System.out.println("Sample usage: java -jar 
+                    rabbit-tutorials.jar 
+                    --spring.profiles.active=hello-world,sender");
+            }
+        };
+    }
+
+    @Profile("!usage_message")
+    @Bean
+    public CommandLineRunner tutorial() {
+        return new RabbitAmqpTutorialsRunner();
+    }
+
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(RabbitAmqpTutorialsApplication.class, args);
+    }
+}
+```
+
+
 
