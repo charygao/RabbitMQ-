@@ -72,5 +72,21 @@ Spring Boot offers numerous features but we will only highlight a few here. Firs
 
 ### 配置项目
 
-Spring Boot提供了很多特性，但在这里我们只显示几个需要用到的。首先，Spring Boot应用的配置可以写在application.properties文件或者application.yml文件里（还有许多其它的方式，但对于我们，用这两种文件就足够了）。你将在生成的项目里找到一个空的application.properties文件。
+Spring Boot提供了很多特性，但在这里我们只显示几个需要用到的。首先，Spring Boot应用的配置可以写在application.properties文件或者application.yml文件里（还有许多其它的方式，但对于我们，用这两种文件就足够了）。你将在生成的项目里找到一个空的application.properties文件。将这个文件重命名为application.yml，并写上这些属性：
+
+```
+spring:
+  profiles:
+    active: usage_message
+
+logging:
+  level:
+    org: ERROR
+
+tutorial:
+  client:
+    duration: 10000
+```
+
+Create a new directory \(package - tut1\) where we can put the tutorial code. We'll now create a JavaConfig file \(Tut1Config.java\) to describe our beans in the following manner:
 
