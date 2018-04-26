@@ -38,3 +38,9 @@ Note that the producer, consumer, and broker do not have to reside on the same h
 
 注意，生产者，消费者和代理不一定都在同一个主机里；实际上，在大多数应用中，这三者都不是在同一个主机里。
 
+## "Hello World"
+
+In this part of the tutorial we'll write two programs using the spring-amqp library; a producer that sends a single message, and a consumer that receives messages and prints them out. We'll gloss over some of the detail in the Spring-amqp API, concentrating on this very simple thing just to get started. It's a "Hello World" of messaging.
+
+
+
