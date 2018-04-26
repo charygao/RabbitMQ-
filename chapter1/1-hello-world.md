@@ -72,7 +72,5 @@ Spring Boot offers numerous features but we will only highlight a few here. Firs
 
 ### 配置项目
 
-Spring Boot提供了很多特性，但在这里我们只突出用几个。
-
-
+Spring Boot提供了很多特性，但在这里我们只显示几个需要用到的。首先，Spring Boot应用的配置可以写在application.properties文件或者application.yml文件里（还有许多其它的方式，但对于我们，用这两种文件就足够了）。你将在
 
