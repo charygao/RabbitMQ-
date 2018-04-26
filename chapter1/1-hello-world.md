@@ -36,3 +36,5 @@ _Consuming_ has a similar meaning to receiving. A _consumer_ is a program that m
 
 Note that the producer, consumer, and broker do not have to reside on the same host; indeed in most applications they don't.
 
+注意，生产者，消费者和代理不一定都在同一个主机里；实际上，在大多数应用中，这三者都不是在同一个主机里。
+
