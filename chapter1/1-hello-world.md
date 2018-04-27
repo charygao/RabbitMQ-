@@ -1,10 +1,8 @@
 # 1 "Hello World!"
 
-## Introduction
+## Introduction（简介）
 
 RabbitMQ is a message broker: it accepts and forwards messages. You can think about it as a post office: when you put the mail that you want posting in a post box, you can be sure that Mr. Postman will eventually deliver the mail to your recipient. In this analogy, RabbitMQ is a post box, a post office and a postman.
-
-## 简介
 
 RabbitMQ是一个消息代理：它接受并转发消息。你可以将它看成是一个邮局：当你将你想发送的邮件丢进邮箱时，你就可以确定邮递员先生最终会把这封邮件送到你的收件人手上。在这个类比当中，RabbitMQ既是邮箱，又是邮局，而且还是邮递员。
 
@@ -66,11 +64,9 @@ Generate the project and unzip the generated project into the location of your c
 
 点击Generate Project生成项目，并将其解压到你想存放的目录。现在你可以在你喜欢的IDE里面导入这个项目。你也可以在你喜欢的编辑器上进行下一步编辑。
 
-### Configuring the project
+### Configuring the project（配置项目）
 
 Spring Boot offers numerous features but we will only highlight a few here. First, Spring Boot applications have the option of providing their properties through either an application.properties or application.yml file \(there are many more options as well but this will get us going\). You'll find an application.properties file in the generated project with nothing in it. Rename application.properties to application.yml file with the following properties:
-
-### 配置项目
 
 Spring Boot提供了很多特性，但在这里我们只显示几个需要用到的。首先，Spring Boot应用的配置可以写在application.properties文件或者application.yml文件里（还有许多其它的方式，但对于我们，用这两种文件就足够了）。你将在生成的项目里找到一个空的application.properties文件。将这个文件重命名为application.yml，并写上这些属性：
 
