@@ -129,7 +129,7 @@ Note that we've defined the 1st tutorial profile as either tut1, the package nam
 
 We will run all of our tutorials through the Boot Application now by simply passing in which profiles we are using. To enable this we will modify the generated RabbitAmqpTutorialsApplication.java with the following:
 
-现在我们将传入将要用的配置文件Boot Application来运行我们的教程
+现在我们将传入将要用的配置文件通过Boot Application来运行我们的教程。为了做到这一点，我们将修改生成的RabbitAmqpTutorialsApplication.java文件，如下所示：
 
 ```java
 import org.springframework.boot.CommandLineRunner;
