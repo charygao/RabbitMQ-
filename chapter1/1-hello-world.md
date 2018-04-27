@@ -171,5 +171,34 @@ public class RabbitAmqpTutorialsApplication {
 }
 ```
 
+and add the RabbitAmqpTutorialsRunner.java code as follows:
+
+然后像下面那样添加RabbitAmqpTutorialsRunner.java代码：
+
+```java
+package org.springframework.amqp.tutorials;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ConfigurableApplicationContext;
+
+public class RabbitAmqpTutorialsRunner implements CommandLineRunner {
+
+    @Value("${tutorial.client.duration:0}")
+    private int duration;
+
+    @Autowired
+    private ConfigurableApplicationContext ctx;
+
+    @Override
+    public void run(String... arg0) throws Exception {
+        System.out.println("Ready ... running for " + duration + "ms");
+        Thread.sleep(duration);
+        ctx.close();
+    }
+}
+```
+
 
 
