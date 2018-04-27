@@ -250,7 +250,7 @@ The receiver is equally simple. We annotate our Receiver class with @RabbitListe
 
 接收者类同样很简单。我们用@RabbitListener来注解我们的接收者类，并传入队列的名字。然后我们用@RabbitHandler来注解我们的接收方法，接收的参数为推入队列里的负载。
 
-```
+```java
 package org.springframework.amqp.tutorials.tut1;
 
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
