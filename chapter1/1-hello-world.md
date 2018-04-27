@@ -283,7 +283,9 @@ The app uses Spring Profiles to control what tutorial it's running, and whether 
 
 We'll come back to this list as we progress through the other five tutorials. After building with maven, run the app however you like to run boot apps \(e.g. from the ide, or command line\). We'll show how to run from the command line.
 
-For example:
+涉及到其它五个教程时我们还会回来参照这个列表。用maven构建完后，你可以用你喜欢的方式来运行程序（例如，通过ide或通过命令行）。我们将展示如何通过命令行来运行。
+
+For example（例如）:
 
 ```
 # publisher
@@ -295,9 +297,11 @@ java -jar rabbitmq-tutorials.jar --spring.profiles.active=hello-world,sender
 java -jar rabbitmq-tutorials.jar --spring.profiles.active=hello-world,receiver
 ```
 
-> #### Listing queues
+> #### Listing queues（列出队列）
 >
 > You may wish to see what queues RabbitMQ has and how many messages are in them. You can do it \(as a privileged user\) using the rabbitmqctl tool:
+>
+> 你可能希望看一下RabbitMQ有哪些队列，这些队列里有多少消息。你可以通过使用rabbitmqctl工具来查看（作为一个授权用户）：
 >
 > ```
 > sudo rabbitmqctl list_queues
@@ -309,7 +313,5 @@ java -jar rabbitmq-tutorials.jar --spring.profiles.active=hello-world,receiver
 > rabbitmqctl.bat list_queues
 > ```
 
-Time to move on to part 2 and build a simple _work queue_
-
-.
+Time to move on to part 2 and build a simple _work queue_.
 
