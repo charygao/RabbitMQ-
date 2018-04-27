@@ -1,4 +1,4 @@
-# 2 工作队列
+# 2 工作队列（Work Queues）
 
 ![](http://www.rabbitmq.com/img/tutorials/python-two.png)
 
