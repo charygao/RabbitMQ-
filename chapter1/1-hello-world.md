@@ -317,5 +317,5 @@ java -jar rabbitmq-tutorials.jar --spring.profiles.active=hello-world,receiver
 
 Time to move on to part 2 and build a simple _work queue_.
 
-接下来我们开始第2部份，并构建一个简单的work queue。
+接下来我们开始第2部份，并构建一个简单的工作队列。
 
