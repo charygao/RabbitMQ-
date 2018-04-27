@@ -309,9 +309,13 @@ java -jar rabbitmq-tutorials.jar --spring.profiles.active=hello-world,receiver
 >
 > On Windows, omit the sudo:
 >
+> 在Windows系统上，输入命令时要去掉sudo：
+>
 > ```
 > rabbitmqctl.bat list_queues
 > ```
 
 Time to move on to part 2 and build a simple _work queue_.
+
+接下来我们开始第2部份，并构建一个简单的work queue。
 
