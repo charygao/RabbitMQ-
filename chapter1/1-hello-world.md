@@ -266,9 +266,11 @@ public class Tut1Receiver {
 }
 ```
 
-### Putting it all together
+### Putting it all together（代码整合）
 
 The app uses Spring Profiles to control what tutorial it's running, and whether it's a Sender or Receiver. Choose which tutorial to run by using the profile. For example:
+
+程序通过使用Spring配置文件来控制正在运行的是哪个教程代码，控制正在运行的是发送者还是接收者。通过使用不同的配置文件来运行不同的教程代码。例如：
 
 ```
 - {tut1|hello-world},{sender|receiver}
