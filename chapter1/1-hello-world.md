@@ -236,9 +236,13 @@ public class Tut1Sender {
 
 You'll notice that spring-amqp removes the boiler plate code leaving you with only the logic of the messaging to be concerned about. We autowire in the queue that was configured in our bean definition in the Tut1Config class and like many spring connection abstractions, we wrap the boilerplate rabbitmq client classes with a RabbitTemplate that can be autowired into the sender. All that is left is to create a message and invoke the template's convertAndSend method passing in the queue name from the bean we defined and the message we just created.
 
-> #### Sending doesn't work!
+你会发觉，spring-amqp移除了样板化代码，让你专注于消息发送逻辑。我们自动注入了队列queue，它已经在前面的Tut1Config类里做了配置。就像大多数spring连接抽象，我们用RabbitTemplate包装了样板化的rabbitmq客户端类，并将它自动注入到发送者类里。我们要做的就是创建一条信息，并调用template的convertAndSend方法，往里传入我们定义的队列bean的名字以及我们刚创建的信息。
+
+> #### Sending doesn't work!（无法发送！）
 >
-> If this is your first time using RabbitMQ and you don't see the "Sent" message then you may be left scratching your head wondering what could be wrong. Maybe the broker was started without enough free disk space \(by default it needs at least 200 MB free\) and is therefore refusing to accept messages. Check the broker logfile to confirm and reduce the limit if necessary. The [configuration file documentation](http://www.rabbitmq.com/tutorials/a%3E%20href=%22http://www.rabbitmq.com/configure.html#config-items%22%3C/a) will show you how to set disk\_free\_limit.
+> If this is your first time using RabbitMQ and you don't see the "Sent" message then you may be left scratching your head wondering what could be wrong. Maybe the broker was started without enough free disk space \(by default it needs at least 200 MB free\) and is therefore refusing to accept messages. Check the broker logfile to confirm and reduce the limit if necessary. The [configuration file documentation](http://www.rabbitmq.com/tutorials/a> href="http://www.rabbitmq.com/configure.html#config-items"</a) will show you how to set disk\_free\_limit.
+>
+> 如果这是你第一次使用RabbitMQ并且你看不到打印出来的“Sent”消息，你可能会在那里苦恼着哪里出错了。也许消息代理在启动时不够磁盘空间（默认它需要200MB的空间），由此导致拒绝接收信息。如有必要，检查代理的日志文件来确认并减少所需最小磁盘空间的限制。配置文件文档里会告诉你如何设置disk\_free\_limit（最小所需磁盘空间）参数
 
 ### Receiving（接收）
 
