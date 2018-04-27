@@ -200,5 +200,108 @@ public class RabbitAmqpTutorialsRunner implements CommandLineRunner {
 }
 ```
 
+### Sending（发送）
 
+![](http://www.rabbitmq.com/img/tutorials/sending.png)
+
+Now there is very little code that needs to go into the sender and receiver classes. Let's call them Tut1Receiver and Tut1Sender. The Sender leverages our config and the RabbitTemplate to send the message.
+
+现在发送者类和接收者类需要写的代码很少。我们把接收者的类名叫做Tut1Receiver，把发送者的类名叫做Tut1Sender。发送者类利用我们的配置和RabbitTemplate类来发送消息。
+
+```java
+// Sender
+package org.springframework.amqp.tutorials.tut1;
+
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+
+public class Tut1Sender {
+
+    @Autowired
+    private RabbitTemplate template;
+
+    @Autowired
+    private Queue queue;
+
+    @Scheduled(fixedDelay = 1000, initialDelay = 500)
+    public void send() {
+        String message = "Hello World!";
+        this.template.convertAndSend(queue.getName(), message);
+        System.out.println(" [x] Sent '" + message + "'");
+    }
+}
+```
+
+You'll notice that spring-amqp removes the boiler plate code leaving you with only the logic of the messaging to be concerned about. We autowire in the queue that was configured in our bean definition in the Tut1Config class and like many spring connection abstractions, we wrap the boilerplate rabbitmq client classes with a RabbitTemplate that can be autowired into the sender. All that is left is to create a message and invoke the template's convertAndSend method passing in the queue name from the bean we defined and the message we just created.
+
+> #### Sending doesn't work!
+>
+> If this is your first time using RabbitMQ and you don't see the "Sent" message then you may be left scratching your head wondering what could be wrong. Maybe the broker was started without enough free disk space \(by default it needs at least 200 MB free\) and is therefore refusing to accept messages. Check the broker logfile to confirm and reduce the limit if necessary. The [configuration file documentation](http://www.rabbitmq.com/tutorials/a%3E%20href=%22http://www.rabbitmq.com/configure.html#config-items%22%3C/a) will show you how to set disk\_free\_limit.
+
+### Receiving（接收）
+
+The receiver is equally simple. We annotate our Receiver class with @RabbitListener and pass in the name of the queue. We then annotate our receive method with @RabbitHandler passing in the payload that has been pushed to the queue.
+
+```
+package org.springframework.amqp.tutorials.tut1;
+
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+
+@RabbitListener(queues = "hello")
+public class Tut1Receiver {
+
+    @RabbitHandler
+    public void receive(String in) {
+        System.out.println(" [x] Received '" + in + "'");
+    }
+}
+```
+
+### Putting it all together
+
+The app uses Spring Profiles to control what tutorial it's running, and whether it's a Sender or Receiver. Choose which tutorial to run by using the profile. For example:
+
+```
+- {tut1|hello-world},{sender|receiver}
+- {tut2|work-queues},{sender|receiver}
+- {tut3|pub-sub|publish-subscribe},{sender|receiver}
+- {tut4|routing},{sender|receiver}
+- {tut5|topics},{sender|receiver}
+- {tut6|rpc},{client|server}
+```
+
+We'll come back to this list as we progress through the other five tutorials. After building with maven, run the app however you like to run boot apps \(e.g. from the ide, or command line\). We'll show how to run from the command line.
+
+For example:
+
+```
+# publisher
+java -jar rabbitmq-tutorials.jar --spring.profiles.active=hello-world,sender
+```
+
+```
+# consumer
+java -jar rabbitmq-tutorials.jar --spring.profiles.active=hello-world,receiver
+```
+
+> #### Listing queues
+>
+> You may wish to see what queues RabbitMQ has and how many messages are in them. You can do it \(as a privileged user\) using the rabbitmqctl tool:
+>
+> ```
+> sudo rabbitmqctl list_queues
+> ```
+>
+> On Windows, omit the sudo:
+>
+> ```
+> rabbitmqctl.bat list_queues
+> ```
+
+Time to move on to part 2 and build a simple _work queue_
+
+.
 
