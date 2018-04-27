@@ -240,13 +240,15 @@ You'll notice that spring-amqp removes the boiler plate code leaving you with on
 
 > #### Sending doesn't work!（无法发送！）
 >
-> If this is your first time using RabbitMQ and you don't see the "Sent" message then you may be left scratching your head wondering what could be wrong. Maybe the broker was started without enough free disk space \(by default it needs at least 200 MB free\) and is therefore refusing to accept messages. Check the broker logfile to confirm and reduce the limit if necessary. The [configuration file documentation](http://www.rabbitmq.com/tutorials/a> href="http://www.rabbitmq.com/configure.html#config-items"</a) will show you how to set disk\_free\_limit.
+> If this is your first time using RabbitMQ and you don't see the "Sent" message then you may be left scratching your head wondering what could be wrong. Maybe the broker was started without enough free disk space \(by default it needs at least 200 MB free\) and is therefore refusing to accept messages. Check the broker logfile to confirm and reduce the limit if necessary. The \[configuration file documentation\]\([http://www.rabbitmq.com/tutorials/a&gt;](http://www.rabbitmq.com/tutorials/a>) href="[http://www.rabbitmq.com/configure.html\#config-items](http://www.rabbitmq.com/configure.html#config-items)"&lt;/a\) will show you how to set disk\_free\_limit.
 >
 > 如果这是你第一次使用RabbitMQ并且你看不到打印出来的“Sent”消息，你可能会在那里苦恼着哪里出错了。也许消息代理在启动时不够磁盘空间（默认它需要200MB的空间），由此导致拒绝接收信息。如有必要，检查代理的日志文件来确认并减少所需最小磁盘空间的限制。配置文件文档里会告诉你如何设置disk\_free\_limit（最小所需磁盘空间）参数
 
 ### Receiving（接收）
 
 The receiver is equally simple. We annotate our Receiver class with @RabbitListener and pass in the name of the queue. We then annotate our receive method with @RabbitHandler passing in the payload that has been pushed to the queue.
+
+接收者类同样很简单。我们用@RabbitListener来注解我们的接收者类，并传入队列的名字。然后我们用@RabbitHandler来注解我们的接收方法，接收的参数为推入队列里的负载。
 
 ```
 package org.springframework.amqp.tutorials.tut1;
