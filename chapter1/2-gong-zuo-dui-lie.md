@@ -14,3 +14,9 @@ This concept is especially useful in web applications where it's impossible to h
 
 对于web应用，这个概念特别有用，因为它使得web应用在短短的HTTP请求窗口内处理复杂的任务成为了可能。
 
+### Preparation（准备工作）
+
+In the previous part of this tutorial we sent a message containing "Hello World!". Now we'll be sending strings that stand for complex tasks. We don't have a real-world task, like images to be resized or pdf files to be rendered, so let's fake it by just pretending we're busy - by using the Thread.sleep\(\) function. We'll take the number of dots in the string as its complexity; every dot will account for one second of "work". For example, a fake task described by Hello... will take three seconds.
+
+
+
