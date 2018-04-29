@@ -22,7 +22,7 @@ In the previous part of this tutorial we sent a message containing "Hello World!
 
 Please see the setup in first tutorial if you have not setup the project. We will follow the same pattern as in the first tutorial: 1\) create a package \(tut2\) and create a Tut2Config, Tut2Receiver, and Tut2Sender. Start by creating a new package \(tut2\) where we'll place our three classes. In the configuration class we setup two profiles, the label for the tutorial \("tut2"\) and the name of the pattern \("work-queues"\). We leverage spring to expose the queue as a bean. We setup the receiver as a profile and define two beans to correspond to the workers in our diagram above： receiver1 and receiver2. Finally, we define a profile for the sender and define the sender bean. The configuration is now done.
 
-如果你还未配置好项目，请见第一个教程的配置过程。我们将采用与第一个教程相同的配置，新建一个包目录（tut2）并创建一个Tut2Config的配置类，一个Tut2Receiver的信息接收类，以及一个Tut2Sender的信息发送类。首先新建好新的包目录（tut2），我们将在这个包下面放刚说到的那三个类。在配置类里，我们将配置两个配置文件，一个作为当前教程的标签（“tut2”），一个作为当前模式的名字（“work-queue”）。我们利用Spring框架将队列暴露为一个bean。
+如果你还未配置好项目，请见第一个教程的配置过程。我们将采用与第一个教程相同的配置，新建一个包目录（tut2）并创建一个Tut2Config的配置类，一个Tut2Receiver的信息接收类，以及一个Tut2Sender的信息发送类。首先新建好新的包目录（tut2），我们将在这个包下面放刚说到的那三个类。在配置类里，我们将配置两个配置文件，一个作为当前教程的标签（“tut2”），一个作为当前模式的名字（“work-queue”）。我们利用Spring框架将队列暴露为一个bean。我们设置一个接受者配置文件，并定义两个bean来对应于上面图中的两个消费者：receiver1和receiver2。最后，我们会定义一个发送者配置文件，并定义作为发送者的bean。这样配置就结束了。
 
 ```java
 import org.springframework.amqp.core.Queue;
@@ -64,6 +64,8 @@ public class Tut2Config {
 ### Sender（发送者）
 
 We will modify the sender to provide a means for identifying whether its a longer running task by appending a dot to the message in a very contrived fashion using the same method on the RabbitTemplate to publish the message, convertAndSend. The documentation defines this as, "Convert a Java object to an Amqp Message and send it to a default exchange with a default routing key."
+
+我们将
 
 ```java
 import org.springframework.amqp.core.Queue;
