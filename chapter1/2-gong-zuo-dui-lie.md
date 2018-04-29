@@ -140,5 +140,88 @@ public class Tut2Receiver {
 }
 ```
 
+### Putting it all together
+
+Compile them using mvn package and run with the following options
+
+```
+mvn clean package
+
+java -jar target/rabbitmq-amqp-tutorials-0.0.1-SNAPSHOT.jar --spring.profiles.active=work-queues,receiver
+java -jar target/rabbitmq-amqp-tutorials-0.0.1-SNAPSHOT.jar --spring.profiles.active=work-queues,sender
+```
+
+The output of the sender should look something like:
+
+```
+Ready ... running for 10000ms
+ [x] Sent 'Hello.1'
+ [x] Sent 'Hello..2'
+ [x] Sent 'Hello...3'
+ [x] Sent 'Hello.4'
+ [x] Sent 'Hello..5'
+ [x] Sent 'Hello...6'
+ [x] Sent 'Hello.7'
+ [x] Sent 'Hello..8'
+ [x] Sent 'Hello...9'
+ [x] Sent 'Hello.10'
+```
+
+And the output from the workers should look something like:
+
+```
+Ready ... running for 10000ms
+instance 1 [x] Received 'Hello.1'
+instance 2 [x] Received 'Hello..2'
+instance 1 [x] Done in 1.001s
+instance 1 [x] Received 'Hello...3'
+instance 2 [x] Done in 2.004s
+instance 2 [x] Received 'Hello.4'
+instance 2 [x] Done in 1.0s
+instance 2 [x] Received 'Hello..5'
+```
+
+### Message acknowledgment
+
+Doing a task can take a few seconds. You may wonder what happens if one of the consumers starts a long task and dies with it only partly done. Spring AMQP by default takes a conservative approach to message acknowledgement. If the listener throws an exception the container calls:
+
+```java
+channel.basicReject(deliveryTag, requeue)
+```
+
+Requeue is true by default unless you explicitly set:
+
+```
+defaultRequeueRejected=false
+```
+
+or the listener throws an AmqpRejectAndDontRequeueException. This is typically the bahavior you want from your listener. In this mode there is no need to worry about a forgotten acknowledgement. After processing the message the listener calls:
+
+```java
+channel.basicAck()
+```
+
+Acknowledgement must be sent on the same channel the delivery it is for was received on. Attempts to acknowledge using a different channel will result in a channel-level protocol exception. See the doc guide on confirmations to learn more. Spring AMQP generally takes care of this but when used in combination with code that uses RabbitMQ Java client directly, this is something to keep in mind.
+
+> #### Forgotten acknowledgment
+>
+> It's a common mistake to miss the basicAck and spring-amqp helps to avoid this through its default configuraiton. The consequences are serious. Messages will be redelivered when your client quits \(which may look like random redelivery\), but RabbitMQ will eat more and more memory as it won't be able to release any unacked messages.
+>
+> In order to debug this kind of mistake you can use rabbitmqctl to print the messages\_unacknowledged field:
+>
+> ```
+> sudo rabbitmqctl list_queues name messages_ready messages_unacknowledged
+> ```
+>
+> On Windows, drop the sudo:
+>
+> ```
+> rabbitmqctl.bat list_queues name messages_ready messages_unacknowledged
+> ```
+
+### Message durability
+
+With spring-amqp there are reasonable default values in the MessageProperties that account for message durability. In particular you can check the table for common properties You'll see two relevant to our discussion here on durability:
+
 
 
