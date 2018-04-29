@@ -223,5 +223,34 @@ Acknowledgement must be sent on the same channel the delivery it is for was rece
 
 With spring-amqp there are reasonable default values in the MessageProperties that account for message durability. In particular you can check the table for common properties You'll see two relevant to our discussion here on durability:
 
+| Property | default | Description |
+| :--- | :--- | :--- |
+| durable | true | When declareExchange is true the durable flag is set to this value |
+| deliveryMode | PERSISTENT | PERSISTENT or NON\_PERSISTENT to determine whether or not RabbitMQ should persist the messages |
 
+> #### Note on message persistence
+>
+> Marking messages as persistent doesn't fully guarantee that a message won't be lost. Although it tells RabbitMQ to save the message to disk, there is still a short time window when RabbitMQ has accepted a message and hasn't saved it yet. Also, RabbitMQ doesn't do fsync\(2\) for every message -- it may be just saved to cache and not really written to the disk. The persistence guarantees aren't strong, but it's more than enough for our simple task queue. If you need a stronger guarantee then you can use publisher confirms.
+
+### Fair dispatch vs Round-robin dispatching
+
+By default, RabbitMQ will send each message to the next consumer, in sequence. On average every consumer will get the same number of messages. This way of distributing messages is called round-robin. In this mode dispatching doesn't necessarily work exactly as we want. For example in a situation with two workers, when all odd messages are heavy and even messages are light, one worker will be constantly busy and the other one will do hardly any work. Well, RabbitMQ doesn't know anything about that and will still dispatch messages evenly.
+
+This happens because RabbitMQ just dispatches a message when the message enters the queue. It doesn't look at the number of unacknowledged messages for a consumer. It just blindly dispatches every n-th message to the n-th consumer.
+
+However, "Fair dispatch" is the default configuration for spring-amqp. The SimpleMessageListenerContainer defines the value for DEFAULT\_PREFETCH\_COUNT to be 1. If the DEFAULT\_PREFECTH\_COUNT were set to 0 the behavior would be round robin messaging as described above.
+
+![](http://www.rabbitmq.com/img/tutorials/prefetch-count.png)
+
+However, with the prefetchCount set to 1 by default, this tells RabbitMQ not to give more than one message to a worker at a time. Or, in other words, don't dispatch a new message to a worker until it has processed and acknowledged the previous one. Instead, it will dispatch it to the next worker that is not still busy.
+
+> #### Note about queue size
+>
+> If all the workers are busy, your queue can fill up. You will want to keep an eye on that, and maybe add more workers, or have some other strategy.
+
+By using spring-amqp you get reasonable values configured for message acknowledgments and fair dispatching. The default durability for queues and persistence for messages provided by spring-amqp allow let the messages to survive even if RabbitMQ is restarted.
+
+For more information on Channel methods and MessageProperties, you can browse the javadocs online For understanding the underlying foundation for spring-amqp you can find the rabbitmq-java-client.
+
+Now we can move on to tutorial 3 and learn how to deliver the same message to many consumers.
 
