@@ -8,7 +8,7 @@ In the first tutorial we wrote programs to send and receive messages from a name
 
 The main idea behind Work Queues \(aka: _Task Queues_\) is to avoid doing a resource-intensive task immediately and having to wait for it to complete. Instead we schedule the task to be done later. We encapsulate a _task_ as a message and send it to a queue. A worker process running in the background will pop the tasks and eventually execute the job. When you run many workers the tasks will be shared between them.
 
-工作队列（也叫做任务队列）
+工作队列（也叫做任务队列）背后的主要目的是为了避免立即执行资源密集型的任务以及避免必须等待任务完成，而是计划
 
 This concept is especially useful in web applications where it's impossible to handle a complex task during a short HTTP request window.
 
