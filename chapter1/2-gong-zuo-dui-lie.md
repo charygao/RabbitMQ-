@@ -20,9 +20,9 @@ In the previous part of this tutorial we sent a message containing "Hello World!
 
 在本教程的前面部分，我们实现了发送包含“Hello World!”的消息。现在，我们将发送表示复杂任务的字符串。由于我们没有现实世界的任务，如调整图片大小或者渲染pdf文件，所以我们通过使用Thread.sleep\(\)函数来让任务显得很忙，以此达到耗时任务的效果。我们将在字符串中用点号的个数来象征复杂度，每个点号将耗费整个任务执行的一秒。例如，Hello...代表任务将执行三秒。
 
-Please see the setup in first tutorial if you have not setup the project. We will follow the same pattern as in the first tutorial: 1\) create a package \(tut2\) and create a Tut2Config, Tut2Receiver, and Tut2Sender. Start by creating a new package \(tut2\) where we'll place our three classes. In the configuration class we setup two profiles, the label for the tutorial \("tut2"\) and the name of the pattern \("work-queues"\). We leverage spring to expose the queue as a bean. We setup the receiver as a profile and define two beans to correspond to the workers in our diagram above; receiver1 and receiver2. Finally, we define a profile for the sender and define the sender bean. The configuration is now done.
+Please see the setup in first tutorial if you have not setup the project. We will follow the same pattern as in the first tutorial: 1\) create a package \(tut2\) and create a Tut2Config, Tut2Receiver, and Tut2Sender. Start by creating a new package \(tut2\) where we'll place our three classes. In the configuration class we setup two profiles, the label for the tutorial \("tut2"\) and the name of the pattern \("work-queues"\). We leverage spring to expose the queue as a bean. We setup the receiver as a profile and define two beans to correspond to the workers in our diagram above： receiver1 and receiver2. Finally, we define a profile for the sender and define the sender bean. The configuration is now done.
 
-如果你还未配置好项目，请见第一个教程的配置过程。我们将采用与第一个教程相同的配置，新建一个包目录（tut2）并创建一个Tut2Config的配置类，一个Tut2Receiver的信息接收类，以及一个Tut2Sender的信息发送类。首先新建好新的包目录（tut2），我们将在这个包下面放刚说到的那三个类。在配置类里，我们将配置两个
+如果你还未配置好项目，请见第一个教程的配置过程。我们将采用与第一个教程相同的配置，新建一个包目录（tut2）并创建一个Tut2Config的配置类，一个Tut2Receiver的信息接收类，以及一个Tut2Sender的信息发送类。首先新建好新的包目录（tut2），我们将在这个包下面放刚说到的那三个类。在配置类里，我们将配置两个配置文件，一个作为当前教程的标签（“tut2”），一个作为当前模式的名字（“work-queue”）。我们利用Spring框架将队列暴露为一个bean。
 
 ```java
 import org.springframework.amqp.core.Queue;
