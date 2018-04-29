@@ -22,6 +22,8 @@ In the previous part of this tutorial we sent a message containing "Hello World!
 
 Please see the setup in first tutorial if you have not setup the project. We will follow the same pattern as in the first tutorial: 1\) create a package \(tut2\) and create a Tut2Config, Tut2Receiver, and Tut2Sender. Start by creating a new package \(tut2\) where we'll place our three classes. In the configuration class we setup two profiles, the label for the tutorial \("tut2"\) and the name of the pattern \("work-queues"\). We leverage spring to expose the queue as a bean. We setup the receiver as a profile and define two beans to correspond to the workers in our diagram above; receiver1 and receiver2. Finally, we define a profile for the sender and define the sender bean. The configuration is now done.
 
+如果你还未配置好项目，请见第一个教程的配置过程。我们将采用与第一个教程相同的配置，新建一个包目录（tut2）并创建一个Tut2Config的配置类，一个Tut2Receiver的信息接收类，以及一个Tut2Sender的信息发送类。首先新建好新的包目录（tut2），我们将在这个包下面放刚说到的那三个类。在配置类里，我们将配置两个
+
 ```java
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
