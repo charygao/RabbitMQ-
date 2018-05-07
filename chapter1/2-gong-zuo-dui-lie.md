@@ -258,7 +258,7 @@ With spring-amqp there are reasonable default values in the MessageProperties th
 >
 > Marking messages as persistent doesn't fully guarantee that a message won't be lost. Although it tells RabbitMQ to save the message to disk, there is still a short time window when RabbitMQ has accepted a message and hasn't saved it yet. Also, RabbitMQ doesn't do fsync\(2\) for every message -- it may be just saved to cache and not really written to the disk. The persistence guarantees aren't strong, but it's more than enough for our simple task queue. If you need a stronger guarantee then you can use publisher confirms.
 >
-> 将消息标记为持久化并不能完全保证消息将不会丢失。虽然它告诉RabbitMQ要将消息保存到磁盘，但仍有一个小的时间窗口
+> 将消息标记为持久化并不能完全保证消息将不会丢失。虽然它告诉RabbitMQ要将消息保存到磁盘，但从RabbitMQ接收信息到将这条信息发送出去仍有一个小的时间窗口。
 
 ### Fair dispatch vs Round-robin dispatching
 
