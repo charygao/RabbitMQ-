@@ -278,13 +278,23 @@ However, "Fair dispatch" is the default configuration for spring-amqp. The Simpl
 
 However, with the prefetchCount set to 1 by default, this tells RabbitMQ not to give more than one message to a worker at a time. Or, in other words, don't dispatch a new message to a worker until it has processed and acknowledged the previous one. Instead, it will dispatch it to the next worker that is not still busy.
 
-> #### Note about queue size
+然而，prefetchCount的值默认设为1，这告诉RabbitMQ不要同时将多个消息分派给一个工作者。换句话说，在某个工作者处理完一条消息并确认它之前，RabbitMQ不会给该工作者分派新的消息，而是将新的消息分派给下一个不是很繁忙的工作者。
+
+> #### Note about queue size（关于队列大小需要注意的地方）
 >
 > If all the workers are busy, your queue can fill up. You will want to keep an eye on that, and maybe add more workers, or have some other strategy.
+>
+> 如果所有的工作者都繁忙，那么你的队列会被填满。你需要注意这种情况，要么添加多几个工作者，要么就采用其它策略。
 
 By using spring-amqp you get reasonable values configured for message acknowledgments and fair dispatching. The default durability for queues and persistence for messages provided by spring-amqp allow let the messages to survive even if RabbitMQ is restarted.
 
-For more information on Channel methods and MessageProperties, you can browse the javadocs online For understanding the underlying foundation for spring-amqp you can find the rabbitmq-java-client.
+通过使用spring-amqp，你将会获取为消息确认和公平调度配置的合理值。spring-amqp为队列和消息持久化提供的持久性使得即使在RabbitMQ重启的情况下，消息还能保存下来。
+
+For more information on Channel methods and MessageProperties, you can browse the javadocs online. For understanding the underlying foundation for spring-amqp you can find the rabbitmq-java-client.
+
+关于channel方法和MessageProperties的更多信息，可以浏览在线的javadocs。若要了解spring-amqp的底层机制，可以参阅rabbitmq-java-client文档。
 
 Now we can move on to tutorial 3 and learn how to deliver the same message to many consumers.
+
+现在我们可以开始教程3，学习如何将相同的消息发送给多个消费者。
 
