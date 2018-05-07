@@ -203,6 +203,8 @@ channel.basicReject(deliveryTag, requeue)
 
 Requeue is true by default unless you explicitly set:
 
+requeue（重入队列）默认为true，除非你显示地将其设置为false：
+
 ```
 defaultRequeueRejected=false
 ```
