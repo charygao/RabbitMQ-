@@ -106,7 +106,7 @@ public class Tut2Sender {
 
 Our receiver, Tut2Receiver, simulates an arbitary length for a fake task in the doWork\(\) method where the number of dots translates into the number of seconds the work will take. Again, we leverage a @RabbitListener on the "hello" queue and a @RabbitHandler to receive the message. The instance that is consuming the message is added to our monitor to show which instance, the message and the length of time to process the message.
 
-我们的接收者类，Tut2Receiver，
+我们的接收者类，Tut2Receiver，在doWork\(\)方法里根据消息所带点号的个数，将其转换成任务所需消耗的秒数，从而模拟了任务的任意长度。同样地，我们对“hello”队列使用了@RabbitListener注解，并使用@RabbitHandler来接收消息。同时，用一个编号来标识正在消费消息的实例，并将它假如我们的监控中，最终打印出实例编号，消息内容以及处理消息所耗费的时长。
 
 ```java
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
