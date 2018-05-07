@@ -260,13 +260,19 @@ With spring-amqp there are reasonable default values in the MessageProperties th
 >
 > 将消息标记为持久化并不能完全保证消息将不会丢失。虽然它告诉RabbitMQ要将消息保存到磁盘，但从RabbitMQ接收消息到将这条消息发送出去仍有一个小的时间窗口。而且，RabbitMQ不会为每条消息都进行fsync操作——它可能仅仅只是将其缓存起来，但并没有真的将消息写入磁盘。这么做虽然无法完全保证持久化，但对于我们简单的任务队列来说，这已经很足够了。如果你需要完全保证持久化，那么你可以使用发布者确认。
 
-### Fair dispatch vs Round-robin dispatching（公平分派vs循环分派）
+### Fair dispatch vs Round-robin dispatching（公平调度vs循环调度）
 
 By default, RabbitMQ will send each message to the next consumer, in sequence. On average every consumer will get the same number of messages. This way of distributing messages is called round-robin. In this mode dispatching doesn't necessarily work exactly as we want. For example in a situation with two workers, when all odd messages are heavy and even messages are light, one worker will be constantly busy and the other one will do hardly any work. Well, RabbitMQ doesn't know anything about that and will still dispatch messages evenly.
 
+默认情况下，RabbitMQ将把每一条消息按顺序逐一发送给下一个消费者。每个消费者都将被平均分到相同的个数的消息。这种消息分派方式被称为循环调度。这种调度模式有时无法完全满足我们的需求。例如，假设有两个工作者，第奇数条消息是重任务，第偶数条消息是轻任务，那么其中一个工作者将会总是很繁忙，而另一个工作者则有可能没什么事做。然而，RabbitMQ并不知道这个状况，并且仍然会这么均匀地分发消息。
+
 This happens because RabbitMQ just dispatches a message when the message enters the queue. It doesn't look at the number of unacknowledged messages for a consumer. It just blindly dispatches every n-th message to the n-th consumer.
 
+会发生这个情况是因为，当消息进入队列时，RabbitMQ仅仅是将消息分派出去。它并考虑某个消费者未确认的消息的数量。它只是盲目地将消息均匀分派给各个消费者。
+
 However, "Fair dispatch" is the default configuration for spring-amqp. The SimpleMessageListenerContainer defines the value for DEFAULT\_PREFETCH\_COUNT to be 1. If the DEFAULT\_PREFECTH\_COUNT were set to 0 the behavior would be round robin messaging as described above.
+
+然而，“公平调度”是spring-amqp的默认配置。SimpleMessageListenerContainer类将DEFAULT\_PREFETCH\_COUNT的值定义为1。如果DEFAULT\_PREFETCH\_COUNT的值被设置为0，那么调度方式将变成循环调用。
 
 ![](http://www.rabbitmq.com/img/tutorials/prefetch-count.png)
 
