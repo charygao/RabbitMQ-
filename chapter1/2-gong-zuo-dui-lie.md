@@ -65,7 +65,7 @@ public class Tut2Config {
 
 We will modify the sender to provide a means for identifying whether its a longer running task by appending a dot to the message in a very contrived fashion using the same method on the RabbitTemplate to publish the message, convertAndSend. The documentation defines this as, "Convert a Java object to an Amqp Message and send it to a default exchange with a default routing key."
 
-我们将
+我们将对发送者类进行修改，在发送方法中，通过人为地在消息后面添加点号来识别当前任务是否为耗时的，并依旧使用RabbitTemplate的convertAndSend方法来发布消息。文档把convertAndSend方法定义为，“将一个Java对象转换成一个Amqp消息，并用一个默认路由键（routing key）将其发送到一个默认的exchange里。”
 
 ```java
 import org.springframework.amqp.core.Queue;
