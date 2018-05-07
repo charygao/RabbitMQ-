@@ -148,6 +148,8 @@ public class Tut2Receiver {
 
 Compile them using mvn package and run with the following options
 
+使用mvn package来编译上述代码，并在运行时添加下面的命令行参数
+
 ```
 mvn clean package
 
@@ -156,6 +158,8 @@ java -jar target/rabbitmq-amqp-tutorials-0.0.1-SNAPSHOT.jar --spring.profiles.ac
 ```
 
 The output of the sender should look something like:
+
+发送者类的输出看起来应该是类似于这样的：
 
 ```
 Ready ... running for 10000ms
@@ -173,6 +177,8 @@ Ready ... running for 10000ms
 
 And the output from the workers should look something like:
 
+而工作者的输出看起来应该是类似于这样的：
+
 ```
 Ready ... running for 10000ms
 instance 1 [x] Received 'Hello.1'
@@ -185,9 +191,11 @@ instance 2 [x] Done in 1.0s
 instance 2 [x] Received 'Hello..5'
 ```
 
-### Message acknowledgment
+### Message acknowledgment（消息确认）
 
 Doing a task can take a few seconds. You may wonder what happens if one of the consumers starts a long task and dies with it only partly done. Spring AMQP by default takes a conservative approach to message acknowledgement. If the listener throws an exception the container calls:
+
+
 
 ```java
 channel.basicReject(deliveryTag, requeue)
