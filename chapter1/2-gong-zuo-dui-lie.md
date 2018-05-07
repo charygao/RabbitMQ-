@@ -195,7 +195,7 @@ instance 2 [x] Received 'Hello..5'
 
 Doing a task can take a few seconds. You may wonder what happens if one of the consumers starts a long task and dies with it only partly done. Spring AMQP by default takes a conservative approach to message acknowledgement. If the listener throws an exception the container calls:
 
-完成一个任务需要耗费几秒。对于一个开始了耗时长的任务的消费者，你可能会想知道
+完成一个任务需要耗费几秒。对于一个开始了耗时长的任务的消费者，你可能会想知道当它只完成了部分任务就挂掉时发生了什么。Spring AMQP
 
 ```java
 channel.basicReject(deliveryTag, requeue)
