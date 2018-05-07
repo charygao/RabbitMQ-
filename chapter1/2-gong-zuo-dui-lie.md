@@ -260,7 +260,7 @@ With spring-amqp there are reasonable default values in the MessageProperties th
 >
 > 将消息标记为持久化并不能完全保证消息将不会丢失。虽然它告诉RabbitMQ要将消息保存到磁盘，但从RabbitMQ接收消息到将这条消息发送出去仍有一个小的时间窗口。而且，RabbitMQ不会为每条消息都进行fsync操作——它可能仅仅只是将其缓存起来，但并没有真的将消息写入磁盘。这么做虽然无法完全保证持久化，但对于我们简单的任务队列来说，这已经很足够了。如果你需要完全保证持久化，那么你可以使用发布者确认。
 
-### Fair dispatch vs Round-robin dispatching
+### Fair dispatch vs Round-robin dispatching（公平分派vs循环分派）
 
 By default, RabbitMQ will send each message to the next consumer, in sequence. On average every consumer will get the same number of messages. This way of distributing messages is called round-robin. In this mode dispatching doesn't necessarily work exactly as we want. For example in a situation with two workers, when all odd messages are heavy and even messages are light, one worker will be constantly busy and the other one will do hardly any work. Well, RabbitMQ doesn't know anything about that and will still dispatch messages evenly.
 
