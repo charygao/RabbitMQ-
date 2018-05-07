@@ -195,7 +195,7 @@ instance 2 [x] Received 'Hello..5'
 
 Doing a task can take a few seconds. You may wonder what happens if one of the consumers starts a long task and dies with it only partly done. Spring AMQP by default takes a conservative approach to message acknowledgement. If the listener throws an exception the container calls:
 
-完成一个任务需要耗费几秒。对于一个开始了耗时长的任务的消费者，你可能会想知道当它只完成了部分任务就挂掉时发生了什么。Spring AMQP默认采用保守的方式来进行消息确认。如果监听者抛出了一个异常，那么容器会调用：
+完成一个任务需要耗费几秒。对于一个开始了耗时长的任务的消费者，你可能会想知道当它只完成了部分任务就挂掉时发生了什么。Spring AMQP默认采用保守的方式来进行消息确认。如果监听器抛出了一个异常，那么容器会调用：
 
 ```java
 channel.basicReject(deliveryTag, requeue)
@@ -211,17 +211,25 @@ defaultRequeueRejected=false
 
 or the listener throws an AmqpRejectAndDontRequeueException. This is typically the bahavior you want from your listener. In this mode there is no need to worry about a forgotten acknowledgement. After processing the message the listener calls:
 
+否则监听器抛出AmqpRejectAndDontRequeueException异常。这通常会是你想要监听器的行为。在这种模式下，无需担心一个被忘记了的确认。在处理完消息后，监听器会调用：
+
 ```java
 channel.basicAck()
 ```
 
 Acknowledgement must be sent on the same channel the delivery it is for was received on. Attempts to acknowledge using a different channel will result in a channel-level protocol exception. See the doc guide on confirmations to learn more. Spring AMQP generally takes care of this but when used in combination with code that uses RabbitMQ Java client directly, this is something to keep in mind.
 
-> #### Forgotten acknowledgment
+消息确认必须在与接收信息相同的channel上进行发送。试图使用不同的channel来进行确认将导致channel级别的协议异常。若想更详细了解，可以参阅文档指南。Spring AMQP一般都会处理好这种问题，除非与直接使用了RabbitMQ的Java客户端的代码结合使用，这点要小心。
+
+> #### Forgotten acknowledgment（被遗忘的确认）
 >
 > It's a common mistake to miss the basicAck and spring-amqp helps to avoid this through its default configuraiton. The consequences are serious. Messages will be redelivered when your client quits \(which may look like random redelivery\), but RabbitMQ will eat more and more memory as it won't be able to release any unacked messages.
 >
+> 忘记调用basciAck方法是常见的一个错误，spring-amqp通过它的默认配置来避免它。这个错误的后果是很严重的。当你的客户端退出后，消息会被重复发送（看起来就像是随机重发），但RabbitMQ将吃掉越来越多的内存，因为它无法释放任何未确认的消息。
+>
 > In order to debug this kind of mistake you can use rabbitmqctl to print the messages\_unacknowledged field:
+>
+> 为了调试这种错误，你可以使用rabbitmqctl来打印messages\_unacknowledged域：
 >
 > ```
 > sudo rabbitmqctl list_queues name messages_ready messages_unacknowledged
@@ -229,13 +237,17 @@ Acknowledgement must be sent on the same channel the delivery it is for was rece
 >
 > On Windows, drop the sudo:
 >
+> 在Windows环境下，去掉sudo：
+>
 > ```
 > rabbitmqctl.bat list_queues name messages_ready messages_unacknowledged
 > ```
 
-### Message durability
+### Message durability（消息持久性）
 
-With spring-amqp there are reasonable default values in the MessageProperties that account for message durability. In particular you can check the table for common properties You'll see two relevant to our discussion here on durability:
+With spring-amqp there are reasonable default values in the MessageProperties that account for message durability. In particular you can check the table for common properties. You'll see two relevant to our discussion here on durability:
+
+对于spring-amqp，消息属性配置里有很多合理的默认值，这些默认值共同决定了消息的持久性。你可以查阅常用属性表。你将会看到与我们正在讨论的消息持久性相关的两个属性：
 
 | Property | default | Description |
 | :--- | :--- | :--- |
