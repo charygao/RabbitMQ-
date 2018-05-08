@@ -30,11 +30,11 @@ A _producer_ is a user application that sends messages.
 
 生产者是值发送消息的应用。
 
-A \_queue \_is a buffer that stores messages.
+A _queue_ is a buffer that stores messages.
 
 队列是指存储消息的缓存。
 
-A \_consumer \_is a user application that receives messages.
+A _consumer_ is a user application that receives messages.
 
 消费者是指接收消息的应用。
 
