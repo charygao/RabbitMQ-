@@ -112,7 +112,7 @@ We ollow the same approach as in the previous two tutorials. We create three pro
 
 The fanout exchange is very simple. As you can probably guess from the name, it just broadcasts all the messages it receives to all the queues it knows. And that's exactly what we need for fanning out our messages.
 
-广播交换器很简单。你大概可以从名字上看出，
+广播交换器很简单。你大概可以从名字上看出，它只是将所有它接收到的消息广播给它所知道的所有队列。
 
 > #### Listing exchanges
 >
