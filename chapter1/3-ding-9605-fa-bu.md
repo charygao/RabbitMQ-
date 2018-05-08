@@ -44,3 +44,67 @@ RabbitMQ的消息队列模型的核心概念是：生产者从不直接往队列
 
 Instead, the producer can only send messages to an _exchange_. An exchange is a very simple thing. On one side it receives messages from producers and the other side it pushes them to queues. The exchange must know exactly what to do with a message it receives. Should it be appended to a particular queue? Should it be appended to many queues? Or should it get discarded. The rules for that are defined by the _exchange type_.
 
+与此相反，生产者只能将消息发送到一个交换器里。交换器做的事情很简单。一方面它接收生产者发送过来的消息，另一方面它将收到的消息推入队列里。交换器必须明确对于收到的消息它该怎么处理。这条消息是否应该附加到某个特定的队列后面？这条消息是否应该附加到多个队列后面？这条消息是否应该被丢弃？这些规则都有交换器类型（exchange type）来定义。
+
+![](https://www.rabbitmq.com/img/tutorials/exchanges.png)
+
+There are a few exchange types available: direct, topic, headers and fanout. We'll focus on the last one -- the fanout. Let's configure a bean to describe an exchange of this type, and call it tut.fanout:
+
+有四种交换器类型可供我们选择：direct，topic，headers和fanout（广播）。
+
+```java
+import org.springframework.amqp.core.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+@Profile({"tut3", "pub-sub", "publish-subscribe"})
+@Configuration
+public class Tut3Config {
+
+    @Bean
+    public FanoutExchange fanout() {
+        return new FanoutExchange("tut.fanout");
+    }
+
+    @Profile("receiver")
+    private static class ReceiverConfig {
+
+        @Bean
+        public Queue autoDeleteQueue1() {
+            return new AnonymousQueue();
+        }
+
+        @Bean
+        public Queue autoDeleteQueue2() {
+            return new AnonymousQueue();
+        }
+
+        @Bean
+        public Binding binding1(FanoutExchange fanout,
+            Queue autoDeleteQueue1) {
+            return BindingBuilder.bind(autoDeleteQueue1).to(fanout);
+        }
+
+        @Bean
+        public Binding binding2(FanoutExchange fanout,
+            Queue autoDeleteQueue2) {
+            return BindingBuilder.bind(autoDeleteQueue2).to(fanout);
+        }
+
+        @Bean
+        public Tut3Receiver receiver() {
+            return new Tut3Receiver();
+        }
+    }
+
+    @Profile("sender")
+    @Bean
+    public Tut3Sender sender() {
+        return new Tut3Sender();
+    }
+}
+```
+
+
+
