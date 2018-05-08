@@ -108,3 +108,5 @@ public class Tut3Config {
 
 We ollow the same approach as in the previous two tutorials. We create three profiles, the tutorial \("tut3", "pub-sub", or "publish-subscribe"\). They are all synonyms for running the fanout profile tutorial. Next we configure the FanoutExchange as a bean. Within the "receiver" \(Tut3Receiver\) file we define" four beans; 1\) two autoDeleteQueues or AnonymousQueues and two bindings to bind those queues to the exchange.
 
+我们采用了前面两个教程相同的方式。我们创建了三个配置文件，
+
