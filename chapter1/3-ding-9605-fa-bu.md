@@ -50,7 +50,7 @@ Instead, the producer can only send messages to an _exchange_. An exchange is a 
 
 There are a few exchange types available: direct, topic, headers and fanout. We'll focus on the last one -- the fanout. Let's configure a bean to describe an exchange of this type, and call it tut.fanout:
 
-有四种交换器类型可供我们选择：直接交换（direct），主体（topic），头部交换（headers）和fanout（广播）。
+有四种交换器类型可供我们选择：直接交换（direct），主体（topic），头部交换（headers）和广播（fanout）。我们将专注于最后一个——广播。我们先配置一个bean来描述这种类型的交换器，并把这个交换器命名为tut.fanout：
 
 ```java
 import org.springframework.amqp.core.*;
