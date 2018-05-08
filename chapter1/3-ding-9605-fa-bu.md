@@ -112,31 +112,43 @@ We ollow the same approach as in the previous two tutorials. We create three pro
 
 The fanout exchange is very simple. As you can probably guess from the name, it just broadcasts all the messages it receives to all the queues it knows. And that's exactly what we need for fanning out our messages.
 
-广播交换器很简单。你大概可以从名字上看出，它只是将所有它接收到的消息广播给它所知道的所有队列。
+广播交换器很简单。你大概可以从名字上看出，它只是将所有它接收到的消息广播给它所知道的所有队列。广播消息这一点正是我们需要的。
 
-> #### Listing exchanges
+> #### Listing exchanges（列出所有的交换器）
 >
-> To list the exchanges on the server you can run the ever usefulrabbitmqctl:
+> To list the exchanges on the server you can run the ever useful rabbitmqctl:
+>
+> 你可以通过运行强大的rabbitmqctl来列出服务器上所有的交换器：
 >
 > ```
 > sudo rabbitmqctl list_exchanges
 > ```
 >
-> In this list there will be someamq.\*exchanges and the default \(unnamed\) exchange. These are created by default, but it is unlikely you'll need to use them at the moment.
+> In this list there will be some amq.\* exchanges and the default \(unnamed\) exchange. These are created by default, but it is unlikely you'll need to use them at the moment.
 >
-> #### Nameless exchange
+> 在这个列表里，会出现一些类似于amq.\*的交换器，以及默认的（未命名）交换器。这些交换器都默认被创建，但这时你不一定会用到它们。
+>
+> #### Nameless exchange（匿名交换器）
 >
 > In previous parts of the tutorial we knew nothing about exchanges, but still were able to send messages to queues. That was possible because we were using a default exchange, which we identify by the empty string \(""\).
 >
+> 在前面的教程里，我们虽然对交换器一无所知，但依旧能够将消息发送到队列里。之所以能这样是因为我们使用了一个默认的交换器，而这个默认的交换器则用空字符串（""）来标识。
+>
 > Recall how we published a message before:
+>
+> 回顾一下我们之前是如何发布消息的：
 >
 > ```
 > template.convertAndSend(fanout.getName(), "", message);
 > ```
 >
-> The first parameter is the the name of the exchange that was autowired into the sender. The empty string denotes the default or \_nameless \_exchange: messages are routed to the queue with the name specified by routingKey, if it exists.
+> The first parameter is the the name of the exchange that was autowired into the sender. The empty string denotes the default or _nameless_ exchange: messages are routed to the queue with the name specified by routingKey, if it exists.
+>
+> 第一个参数是被自动注入到发送者类的交换器的名字。空字符串表示该交换器是默认或者匿名的：
 
 Now, we can publish to our named exchange instead:
+
+现在，我们可以将信息发布到我们命名好的交换器里：
 
 ```java
 @Autowired
@@ -150,9 +162,13 @@ template.convertAndSend(fanout.getName(), "", message);
 
 From now on the fanout exchange will append messages to our queue.
 
-## Temporary queues
+从现在开始，广播交换器将会把信息附加到我们的队列里。
 
-As you may remember previously we were using queues which had a specified name \(rememberhello\). Being able to name a queue was crucial for us -- we needed to point the workers to the same queue. Giving a queue a name is important when you want to share the queue between producers and consumers.
+## Temporary queues（临时队列）
+
+As you may remember previously we were using queues which had a specified name \(remember hello\). Being able to name a queue was crucial for us -- we needed to point the workers to the same queue. Giving a queue a name is important when you want to share the queue between producers and consumers.
+
+就如你记住的那样，之前我们都是使用具有指定名字的队列（前面的教程里用的是hello）。命名一个队列对于我们是至关重要的——我们需要将工作者指到相同的队列上去。当你想要在生产者和消费者之间共享队列时，为队列指定一个名字是很重要的。
 
 But that's not the case for our fanout example. We want to hear about all messages, not just a subset of them. We're also interested only in currently flowing messages not in the old ones. To solve that we need two things.
 
