@@ -26,15 +26,15 @@ Let's quickly go over what we covered in the previous tutorials:
 
 我们先来快速过一遍前面的教程里涉及到的内容：
 
-A _producer _is a user application that sends messages.
+A _producer_ is a user application that sends messages.
 
 生产者是值发送消息的应用。
 
-A _queue _is a buffer that stores messages.
+A \_queue \_is a buffer that stores messages.
 
 队列是指存储消息的缓存。
 
-A _consumer _is a user application that receives messages.
+A \_consumer \_is a user application that receives messages.
 
 消费者是指接收消息的应用。
 
@@ -43,8 +43,4 @@ The core idea in the messaging model in RabbitMQ is that the producer never send
 RabbitMQ的消息队列模型的核心概念是：生产者从不直接往队列里发送任何消息。实际上，多数情况下生产者甚至不知道消息是否会被发送到队列里。
 
 Instead, the producer can only send messages to an _exchange_. An exchange is a very simple thing. On one side it receives messages from producers and the other side it pushes them to queues. The exchange must know exactly what to do with a message it receives. Should it be appended to a particular queue? Should it be appended to many queues? Or should it get discarded. The rules for that are defined by the _exchange type_.
-
-
-
-
 
