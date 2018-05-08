@@ -106,7 +106,75 @@ public class Tut3Config {
 }
 ```
 
-We ollow the same approach as in the previous two tutorials. We create three profiles, the tutorial \("tut3", "pub-sub", or "publish-subscribe"\). They are all synonyms for running the fanout profile tutorial. Next we configure the FanoutExchange as a bean. Within the "receiver" \(Tut3Receiver\) file we define" four beans; 1\) two autoDeleteQueues or AnonymousQueues and two bindings to bind those queues to the exchange.
+We ollow the same approach as in the previous two tutorials. We create three profiles, the tutorial \("tut3", "pub-sub", or "publish-subscribe"\). They are all synonyms for running the fanout profile tutorial. Next we configure the FanoutExchange as a bean. Within the "receiver" \(Tut3Receiver\) file we define four beans: two autoDeleteQueues or AnonymousQueues and two bindings to bind those queues to the exchange.
 
-我们采用了前面两个教程相同的方式。我们创建了三个配置文件，
+我们采用了前面两个教程相同的方式。我们创建了三个配置，"tut3"，“pub-sub”，还有“publish-subscribe”。这三个配置在运行本教程时都是等效的。接下来我们会配置一个类型为FanoutExchange的bean。
+
+The fanout exchange is very simple. As you can probably guess from the name, it just broadcasts all the messages it receives to all the queues it knows. And that's exactly what we need for fanning out our messages.
+
+> #### Listing exchanges
+>
+> To list the exchanges on the server you can run the ever usefulrabbitmqctl:
+>
+> ```
+> sudo rabbitmqctl list_exchanges
+> ```
+>
+> In this list there will be someamq.\*exchanges and the default \(unnamed\) exchange. These are created by default, but it is unlikely you'll need to use them at the moment.
+>
+> #### Nameless exchange
+>
+> In previous parts of the tutorial we knew nothing about exchanges, but still were able to send messages to queues. That was possible because we were using a default exchange, which we identify by the empty string \(""\).
+>
+> Recall how we published a message before:
+>
+> ```
+> template.convertAndSend(fanout.getName(), "", message);
+> ```
+>
+> The first parameter is the the name of the exchange that was autowired into the sender. The empty string denotes the default or _nameless _exchange: messages are routed to the queue with the name specified by routingKey, if it exists.
+
+Now, we can publish to our named exchange instead:
+
+```java
+@Autowired
+private RabbitTemplate template;
+
+@Autowired
+private FanoutExchange fanout;   // configured in Tut3Config above
+
+template.convertAndSend(fanout.getName(), "", message);
+```
+
+From now on the fanout exchange will append messages to our queue.
+
+## Temporary queues
+
+As you may remember previously we were using queues which had a specified name \(rememberhello\). Being able to name a queue was crucial for us -- we needed to point the workers to the same queue. Giving a queue a name is important when you want to share the queue between producers and consumers.
+
+But that's not the case for our fanout example. We want to hear about all messages, not just a subset of them. We're also interested only in currently flowing messages not in the old ones. To solve that we need two things.
+
+Firstly, whenever we connect to Rabbit we need a fresh, empty queue. To do this we could create a queue with a random name, or, even better - let the server choose a random queue name for us.
+
+Secondly, once we disconnect the consumer the queue should be automatically deleted. To do this with the spring-amqp client, we defined and_AnonymousQueue_, which creates a non-durable, exclusive, autodelete queue with a generated name:
+
+```java
+@Bean
+public Queue autoDeleteQueue1() {
+    return new AnonymousQueue();
+}
+
+@Bean
+public Queue autoDeleteQueue2() {
+    return new AnonymousQueue();
+}
+```
+
+At this point our queue names contain a random queue names. For example it may look like amq.gen-JzTY20BRgKO-HjmUJj0wLg.
+
+## Bindings
+
+![](https://www.rabbitmq.com/img/tutorials/bindings.png)
+
+We've already created a fanout exchange and a queue. Now we need to tell the exchange to send messages to our queue. That relationship between exchange and a queue is called a _binding_. In the above Tut3Config you can see that we have two bindings, one for each AnonymousQueue.
 
