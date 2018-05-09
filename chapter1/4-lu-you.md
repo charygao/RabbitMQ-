@@ -10,5 +10,35 @@ In this tutorial we're going to add a feature to it - we're going to make it pos
 
 ## Bindings（绑定）
 
+In previous examples we were already creating bindings. You may recall code like this in our Tut3Config file:
 
+在之前的例子当中，我们创建了绑定。通过下面的代码片段回顾下我们的Tut3Config配置文件：
+
+```java
+@Bean
+public Binding binding1(FanoutExchange fanout, 
+    Queue autoDeleteQueue1) {
+    return BindingBuilder.bind(autoDeleteQueue1).to(fanout);
+}
+```
+
+A binding is a relationship between an exchange and a queue. This can be simply read as: the queue is interested in messages from this exchange.
+
+交换器和队列是通过绑定连结在一起的。这种关系可以读作：这个队列对这个交换器里的消息感兴趣。
+
+Bindings can take an extra routingKey parameter. Spring-amqp uses a fluent API to make this relationship very clear. We pass in the exchange and queue into the BindingBuilder and simply bind the queue "to" the exchange "with a routing key" as follows:
+
+可以再传一个路由键（routingKey）参数给绑定。Spring-amqp
+
+```java
+@Bean
+public Binding binding1a(DirectExchange direct, 
+    Queue autoDeleteQueue1) {
+    return BindingBuilder.bind(autoDeleteQueue1)
+        .to(direct)
+        .with("orange");
+}
+```
+
+The meaning of a binding key depends on the exchange type. The fanout exchanges, which we used previously, simply ignored its value.
 
