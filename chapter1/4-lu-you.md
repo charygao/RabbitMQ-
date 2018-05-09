@@ -72,5 +72,13 @@ In such a setup a message published to the exchange with a routing key orange wi
 
 在这种情况下，带有orange路由键的消息被发布到交换器时，会被路由到队列Q1。带有black键或green键的消息将被推入到队列Q2。所有其它的消息将被丢弃。
 
+## Multiple bindings（多绑定）
+
+![](https://www.rabbitmq.com/img/tutorials/direct-exchange-multiple.png)
+
+It is perfectly legal to bind multiple queues with the same binding key. In our example we could add a binding between X and Q1 with binding key black. In that case, the direct exchange will behave like fanout and will broadcast the message to all the matching queues. A message with routing key black will be delivered to both Q1 and Q2.
+
+## Publishing messages（发布消息）
+
 
 
