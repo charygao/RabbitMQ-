@@ -84,3 +84,20 @@ It is perfectly legal to bind multiple queues with the same binding key. In our 
 
 We'll use this model for our routing system. Instead of fanout we'll send messages to a direct exchange. We will supply the color as a routing key. That way the receiving program will be able to select the color it wants to receive \(or subscribe to\). Let's focus on sending messages first.
 
+我们将在我们的路由系统中使用这种模型。我们将发送消息给直接交换器，而不是广播交换器。我们将使用颜色作为路由键。这么做的话接收者程序就可以选择它想接收（或者说订阅）的颜色。让我们先看看如何发送消息。
+
+As always, we do some spring boot configuration in Tut4Config:
+
+照例，我们在Tut4Config配置文件里做些spring boot配置：
+
+```java
+@Bean
+public FanoutExchange fanout() {
+    return new FanoutExchange("tut.fanout");
+}
+```
+
+And we're ready to send a message. Colors, as in the diagram, can be one of 'orange', 'black', or 'green'.
+
+现在我们准备发送一条消息。如图所示，颜色可以是"orange"，"black"，或者“green”
+
