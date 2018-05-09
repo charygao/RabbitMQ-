@@ -78,7 +78,9 @@ In such a setup a message published to the exchange with a routing key orange wi
 
 It is perfectly legal to bind multiple queues with the same binding key. In our example we could add a binding between X and Q1 with binding key black. In that case, the direct exchange will behave like fanout and will broadcast the message to all the matching queues. A message with routing key black will be delivered to both Q1 and Q2.
 
+多个队列用同个键绑定到同个交换器是完全合法的。在我们的例子当中，我们可以用键black在交换器X和队列Q1之间添加绑定。在这种情况下，直接交换器的行为将和广播交换器一样，将消息广播给所有匹配的队列。带有路由键black的消息将被发送给队列Q1和队列Q2。
+
 ## Publishing messages（发布消息）
 
-
+We'll use this model for our routing system. Instead of fanout we'll send messages to a direct exchange. We will supply the color as a routing key. That way the receiving program will be able to select the color it wants to receive \(or subscribe to\). Let's focus on sending messages first.
 
