@@ -90,5 +90,89 @@ On the other hand "lazy.orange.male.rabbit", even though it has four words, will
 >
 > 当特殊符号“\*”（星号）和“\#”（哈希号）没有出现在绑定键时，主题交换器就表现得跟直接交换器一样。
 
+## Putting it all together
 
+We're going to use a topic exchange in our messaging system. We'll start off with a working assumption that the routing keys will take advantage of both wildcards and a hash tag.
+
+我们将在我们的消息队列系统中使用主题交换器。开始之前，我们先假设路由键将会用到通配符和哈希标签。
+
+The code is almost the same as in the previous tutorial.
+
+代码几乎与上一个教程的代码一样。
+
+First let's configure some profiles and beans in the Tut5Config.java of the tut5 package:
+
+首先，我们在tut5包目录下新建Tut5Config.java，并在这个配置类里配置好一些配置组和bean：
+
+```java
+import org.springframework.amqp.core.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+@Profile({"tut5","topics"})
+@Configuration
+public class Tut5Config {
+
+    @Bean
+    public TopicExchange topic() {
+        return new TopicExchange("tut.topic");
+    }
+
+    @Profile("receiver")
+    private static class ReceiverConfig {
+
+        @Bean
+        public Tut5Receiver receiver() {
+            return new Tut5Receiver();
+        }
+
+        @Bean
+        public Queue autoDeleteQueue1() {
+            return new AnonymousQueue();
+        }
+
+        @Bean
+        public Queue autoDeleteQueue2() {
+            return new AnonymousQueue();
+        }
+
+        @Bean
+        public Binding binding1a(TopicExchange topic, 
+            Queue autoDeleteQueue1) {
+            return BindingBuilder.bind(autoDeleteQueue1)
+                .to(topic)
+                .with("*.orange.*");
+        }
+
+        @Bean
+        public Binding binding1b(TopicExchange topic, 
+            Queue autoDeleteQueue1) {
+            return BindingBuilder.bind(autoDeleteQueue1)
+                .to(topic)
+                .with("*.*.rabbit");
+        }
+
+        @Bean
+        public Binding binding2a(TopicExchange topic, 
+            Queue autoDeleteQueue2) {
+            return BindingBuilder.bind(autoDeleteQueue2)
+                .to(topic)
+                .with("lazy.#");
+        }
+
+    }
+
+    @Profile("sender")
+    @Bean
+    public Tut5Sender sender() {
+        return new Tut5Sender();
+    }
+
+}
+```
+
+We setup our profiles for executing the topics as the choice of "tut5" or "topics". We then created the bean for our TopicExchange. The "receiver" profile is the ReceiverConfig defining our receiver, two AnonymousQueues as in the previous tutorial and the bindings for the topics utilizing the topic syntax. We also create the "sender" profile as the creation of the Tut5Sender class.
+
+我们将配置组的名字设置为“tut5”或“topics”，要运行主题时任选一个即可。然后我们创建了类型为TopicExchange的bean。接收者配置组为ReceiveConfig类，在其里面定义了我们的接收者，两个AnonymousQueue类型的队列，就像上一个教程那样，同时
 
