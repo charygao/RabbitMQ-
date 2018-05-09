@@ -50,3 +50,19 @@ Our messaging system from the previous tutorial broadcasts all messages to all c
 
 在上一个教程里，我们的消息队列系统将所有消息广播给所有的消费者。现在我们需要让消息队列系统可以基于消息的颜色类型进行消息过滤。例如，对于一个将日志消息写入磁盘的程序，我们可能只想让它接收严重错误类型的日志消息，而不是警告或者信息级别的日志消息，从而不致于浪费磁盘空间。
 
+We were using a fanout exchange, which doesn't give us much flexibility - it's only capable of mindless broadcasting.
+
+在上一个教程里，我们用到的广播交换器不能给我们这个灵活性，因为它只会做机械广播。
+
+We will use a direct exchange instead. The routing algorithm behind a direct exchange is simple - a message goes to the queues whose binding key exactly matches the routing key of the message.
+
+我们将会使用直接交换器来替换它。直接交换器背后的路由算法很简单——当消息被推入到某个队列时，这个队列绑定的键要与消息的路由键完全匹配。
+
+To illustrate that, consider the following setup:
+
+为了说明这一点，考虑下面的情况：
+
+![](https://www.rabbitmq.com/img/tutorials/direct-exchange.png)
+
+
+
