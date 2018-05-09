@@ -172,9 +172,15 @@ As you may remember previously we were using queues which had a specified name \
 
 But that's not the case for our fanout example. We want to hear about all messages, not just a subset of them. We're also interested only in currently flowing messages not in the old ones. To solve that we need two things.
 
+但在我们在用广播交换器时则不用这么做。我们需要收到所有的消息，而不仅仅是部分。我们也只关心当前的消息，而不是旧的那一部分。为了解决这些需求，我们需要做两件事。
+
 Firstly, whenever we connect to Rabbit we need a fresh, empty queue. To do this we could create a queue with a random name, or, even better - let the server choose a random queue name for us.
 
-Secondly, once we disconnect the consumer the queue should be automatically deleted. To do this with the spring-amqp client, we defined and_AnonymousQueue_, which creates a non-durable, exclusive, autodelete queue with a generated name:
+首先，无论什么时候连接RabbitMQ，我们都需要一个新的而且是空的队列。为了做到这点，我们可以创建一个名字随机的队列，或者更好的做法是，让服务器为我们选一个随机的队列。
+
+Secondly, once we disconnect the consumer the queue should be automatically deleted. To do this with the spring-amqp client, we defined an _AnonymousQueue_, which creates a non-durable, exclusive, autodelete queue with a generated name:
+
+然后，一旦我们断开了消费者，队列应该被自动删除。我们可以通过spring-amqp客户端来做到这点，在配置里我们定义了一个AnonymousQueue类型的队列，它的名字是由客户端生成的，而且是非持久的，独占的，自动删除的队列：
 
 ```java
 @Bean
@@ -190,11 +196,15 @@ public Queue autoDeleteQueue2() {
 
 At this point our queue names contain a random queue names. For example it may look like amq.gen-JzTY20BRgKO-HjmUJj0wLg.
 
+此时我们的队列名字是随机的。例如，队列名字可能看起来是这样的：amq.gen-JzTY20BRgKO-HjmUJj0wLg。
+
 ## Bindings
 
 ![](https://www.rabbitmq.com/img/tutorials/bindings.png)
 
 We've already created a fanout exchange and a queue. Now we need to tell the exchange to send messages to our queue. That relationship between exchange and a queue is called a _binding_. In the above Tut3Config you can see that we have two bindings, one for each AnonymousQueue.
+
+
 
 ```java
 @Bean
