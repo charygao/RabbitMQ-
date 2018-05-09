@@ -64,5 +64,7 @@ To illustrate that, consider the following setup:
 
 ![](https://www.rabbitmq.com/img/tutorials/direct-exchange.png)
 
+In this setup, we can see the direct exchange X with two queues bound to it. The first queue is bound with binding key orange, and the second has two bindings, one with binding key black and the other one with green.
 
+从图中我们可以看到，有两个队列绑定了直接交换器X。
 
