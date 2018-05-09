@@ -105,6 +105,8 @@ And we're ready to send a message. Colors, as in the diagram, can be one of 'ora
 
 Receiving messages will work just like in the previous tutorial, with one exception - we're going to create a new binding for each color we're interested in. This also goes into the Tut4Config.
 
+
+
 ```java
 @Bean
 public DirectExchange direct() {
