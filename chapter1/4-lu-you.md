@@ -42,3 +42,11 @@ public Binding binding1a(DirectExchange direct,
 
 The meaning of a binding key depends on the exchange type. The fanout exchanges, which we used previously, simply ignored its value.
 
+绑定键的含义取决与交换器的类型。我们之前使用的广播交换器就忽略了这个值。
+
+## Direct exchange（直接交换器）
+
+Our messaging system from the previous tutorial broadcasts all messages to all consumers. We want to extend that to allow filtering messages based on their color type. For example, we may want a program which writes log messages to the disk to only receive critical errors, and not waste disk space on warning or info log messages.
+
+
+
