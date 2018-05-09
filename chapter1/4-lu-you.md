@@ -101,3 +101,28 @@ And we're ready to send a message. Colors, as in the diagram, can be one of 'ora
 
 现在我们准备发送一条消息。如图所示，颜色可以是"orange"，"black"，或者“green”
 
+## Subscribing（订阅）
+
+Receiving messages will work just like in the previous tutorial, with one exception - we're going to create a new binding for each color we're interested in. This also goes into the Tut4Config.
+
+```java
+@Bean
+public DirectExchange direct() {
+    return new DirectExchange("tut.direct");
+}
+...
+@Bean
+public Binding binding1a(DirectExchange direct, 
+    Queue autoDeleteQueue1) {
+    return BindingBuilder.bind(autoDeleteQueue1)
+        .to(direct)
+        .with("orange");
+}
+```
+
+## Putting it all together
+
+![](https://www.rabbitmq.com/img/tutorials/python-four.png)
+
+
+
