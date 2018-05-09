@@ -2,7 +2,7 @@
 
 In the previous tutorial we improved our messaging flexibility. Instead of using a fanout exchange only capable of dummy broadcasting, we used a direct one, and gained a possibility of selectively receiving the message based on the routing key.
 
- 在上一个教程里我们改善了我们的消息队列的灵活性。我们使用直接交换器来替代只会傻傻地广播消息的广播交换器，使得根据路由键来选择性接收消息成为了可能。
+在上一个教程里我们改善了我们的消息队列的灵活性。我们使用直接交换器来替代只会傻傻地广播消息的广播交换器，使得根据路由键来选择性接收消息成为了可能。
 
 Although using the direct exchange improved our system, it still has limitations - it can't do routing based on multiple criteria.
 
@@ -49,6 +49,46 @@ In this example, we're going to send messages which all describe animals. The me
 在图例中，我们将发送所有描述动物的消息。每条消息将和包含着由三个单词组成（两个点号）的路由键一起被发送。路由键中的第一个单词将描述速度，第二个单词描述颜色，第三个单词描述种类，即格式为："&lt;speed&gt;.&lt;colour&gt;.&lt;species&gt;"。
 
 We created three bindings: Q1 is bound with binding key "\*.orange.\*" and Q2 with "\*.\*.rabbit" and "lazy.\#".
+
+我们建立了三个绑定：队列Q1使用绑定键“\*.orange.\*”，队列Q2使用“\*.\*.rabbit”和“lazy.\#”。
+
+These bindings can be summarised as:
+
+这些绑定可以总结描述为：
+
+Q1 is interested in all the orange animals.
+
+队列Q1对所有橙色的动物感兴趣。
+
+Q2 wants to hear everything about rabbits, and everything about lazy animals.
+
+队列Q2想监听所有的兔子，以及所有带有懒惰属性的动物。
+
+A message with a routing key set to "quick.orange.rabbit" will be delivered to both queues. Message "lazy.orange.elephant" also will go to both of them. On the other hand "quick.orange.fox" will only go to the first queue, and "lazy.brown.fox" only to the second. "lazy.pink.rabbit" will be delivered to the second queue only once, even though it matches two bindings. "quick.brown.fox" doesn't match any binding so it will be discarded.
+
+带有路由键为“quick.orange.rabbit”的消息将同时被发送给队列Q1和Q2。带有路由键为“lazy.orange.elephant”的消息也同样将被发送给这两条队列。另一方面，路由键为“quick.orange.fox”的消息将仅被发送给队列Q1，而路由键为“lazy.brown.fox”的消息将仅被发送给队列Q2。路由键为“lazy.pink.rabbit”的消息将只被发送给队列Q2一次，即使它匹配队列Q2的两个绑定。路由键“quick.brown.fox”的消息由于不匹配任何绑定，所以它将被丢弃。
+
+What happens if we break our contract and send a message with one or four words, like "orange" or "quick.orange.male.rabbit"? Well, these messages won't match any bindings and will be lost.
+
+如果我们打破了约定并发送了路由键为一个或四个单词的消息，如“orange”或者“quick.orange.male.rabbit”，会发生什么现象？没事，由于这些消息不能匹配任何绑定，所以它们也将被丢弃。
+
+On the other hand "lazy.orange.male.rabbit", even though it has four words, will match the last binding and will be delivered to the second queue.
+
+另一方面，虽然“lazy.orange.male.rabbit”包含了四个词，但它匹配了最后一条绑定规则，所以它将被发送给队列Q2。
+
+> #### Topic exchange（主题交换器）
+>
+> Topic exchange is powerful and can behave like other exchanges.
+>
+> 主题交换器很强大，而且还能表现出与其它类型的交换器相同的行为。
+>
+> When a queue is bound with "\#" \(hash\) binding key - it will receive all the messages, regardless of the routing key - like in fanout exchange.
+>
+> 当一个队列与“\#”（哈希号）绑定键绑定时，它将接收所有的消息，而不管消息的路由键是什么，此时的队列看起来就像与广播交换器绑定了一样。
+>
+> When special characters "\*" \(star\) and "\#" \(hash\) aren't used in bindings, the topic exchange will behave just like a direct one.
+>
+> 当特殊符号“\*”（星号）和“\#”（哈希号）没有出现在绑定键时，主题交换器就表现得跟直接交换器一样。
 
 
 
