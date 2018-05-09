@@ -204,7 +204,7 @@ At this point our queue names contain a random queue names. For example it may l
 
 We've already created a fanout exchange and a queue. Now we need to tell the exchange to send messages to our queue. That relationship between exchange and a queue is called a _binding_. In the above Tut3Config you can see that we have two bindings, one for each AnonymousQueue.
 
-
+我们已经创建了一个广播交换器和一个队列。现在我们需要让交换器将消息发送到我们的队列里。用于连接交换器和队列的对象被称为binding。在上面的Tut3Config里，你会发现我们配置了两个binding，分别对应一个AnonymousQueue。
 
 ```java
 @Bean
