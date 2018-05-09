@@ -28,7 +28,7 @@ A binding is a relationship between an exchange and a queue. This can be simply 
 
 Bindings can take an extra routingKey parameter. Spring-amqp uses a fluent API to make this relationship very clear. We pass in the exchange and queue into the BindingBuilder and simply bind the queue "to" the exchange "with a routing key" as follows:
 
-可以再传一个路由键（routingKey）参数给绑定。Spring-amqp
+可以再传一个路由键（routingKey）参数给绑定。在这点上，Spring-amqp使用了流式API，使得队列，交换器和路由键之间的关系变得很清晰。我们将某个交换器和某个队列传给BindingBuilder，将传入的队列用某个路由键绑定到传入的交换器上，如下所示：
 
 ```java
 @Bean
