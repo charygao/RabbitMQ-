@@ -224,11 +224,13 @@ public Binding binding1(FanoutExchange fanout,
 > rabbitmqctl list_bindings
 > ```
 
-## Putting it all together（）
+## Putting it all together
 
 ![](https://www.rabbitmq.com/img/tutorials/python-three-overall.png)
 
 The producer program, which emits messages, doesn't look much different from the previous tutorial. The most important change is that we now want to publish messages to our fanout exchange instead of the nameless one. We need to supply a routingKey when sending, but its value is ignored for fanout exchanges. Here goes the code for tut3.Sender.java program:
+
+本教程里用于生产消息的生产者程序看起来与前面教程里的生产者程序没什么区别。最大的变化是我们现在想把消息发布到广播交换器里去，而不是匿名交换器。发送消息时我们需要用到路由键（routingKey），但对于广播交换器，它的值是被忽略的。以下是本教程的发送者类代码：
 
 ```java
 import org.springframework.amqp.core.FanoutExchange;
@@ -264,11 +266,17 @@ public class Tut3Sender {
 }
 ```
 
-As you see, we leverage the beans from the Tut3Config file and autowire in the RabbitTemplate along with our configured FanoutExchange This step is necessary as publishing to a non-existing exchange is forbidden.
+As you see, we leverage the beans from the Tut3Config file and autowire in the RabbitTemplate along with our configured FanoutExchange. This step is necessary as publishing to a non-existing exchange is forbidden.
+
+就如你所看到的那样，我们利用Tut3Config文件里配置好的bean，并自动注入RabbitTemplate和FanoutExchange。这一步是很有必要的，因为发布消息到不存在的交换器是不允许的。
 
 The messages will be lost if no queue is bound to the exchange yet, but that's okay for us; if no consumer is listening yet we can safely discard the message.
 
+如果没有队列绑定到交换器，那么消息将会丢失，但这对于我们来说是可接受的；如果没有消费者在监听队列，那么即使消息丢失也是安全的。
+
 The code forTut3Receiver.java:
+
+以下是发送者类的代码：
 
 ```java
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -309,11 +317,15 @@ public class Tut3Receiver {
 
 Compile as before and we're ready to execute the fanout sender and receiver.
 
+像之前那样编译，我们已经准备好要运行基于广播的发送者程序和接收者程序了。
+
 ```
 mvn clean package
 ```
 
 And of course, to execute the tutorial do the following:
+
+当然，若要运行示例代码，我们还要执行以下命令行语句：
 
 ```
 java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar --spring.profiles.active=pub-sub,receiver 
@@ -324,13 +336,21 @@ java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar --spring.profiles.active=pub
 
 Using rabbitmqctl list\_bindings you can verify that the code actually creates bindings and queues as we want. With two ReceiveLogs.java programs running you should see something like:
 
+使用rabbitmqctl list\_bindings语句你可以验证上述代码的确按照我们所想的创建了绑定和队列。执行语句后你会看到类似于如下的信息：
+
 ```
 sudo rabbitmqctl list_bindings
 tut.fanout  exchange    8b289c9c-a1eb-4a3a-b6a9-163c4fdcb6c2    queue       []
 tut.fanout  exchange    d7e7d193-65b1-4128-a532-466a5256fd31    queue       []
 ```
 
-The interpretation of the result is straightforward: data from exchangelogsgoes to two queues with server-assigned names. And that's exactly what we intended.
+The interpretation of the result is straightforward: data from exchange logs goes to two queues with server-assigned names. And that's exactly what we intended.
 
-To find out how to listen for a subset of messages, let's move on to tutorial 4
+打印结果的意思很明显：从交换器过来的消息进入了两个由服务器命名的队列。这正是我们想要的结果。
+
+To find out how to listen for a subset of messages, let's move on to tutorial 4.
+
+接下来我们开始教程4，一起来看看如何监听部分消息。
+
+
 
