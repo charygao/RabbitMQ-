@@ -70,5 +70,7 @@ In this setup, we can see the direct exchange X with two queues bound to it. The
 
 In such a setup a message published to the exchange with a routing key orange will be routed to queue Q1. Messages with a routing key of black or green will go to Q2. All other messages will be discarded.
 
-在这种情况下，带有orange路由键的消息被发布到交换器时，会被路由到队列Q1。
+在这种情况下，带有orange路由键的消息被发布到交换器时，会被路由到队列Q1。带有black键或green键的消息将被推入到队列Q2。所有其它的消息将被丢弃。
+
+
 
