@@ -124,5 +124,182 @@ public Binding binding1a(DirectExchange direct,
 
 ![](https://www.rabbitmq.com/img/tutorials/python-four.png)
 
+As in the previous tutorials, create a new package for this tutorial called "tut4" and create the Tut4Config class. The code for Tut4Config.java class:
 
+```java
+import org.springframework.amqp.core.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+@Profile({"tut4","routing"})
+@Configuration
+public class Tut4Config {
+
+    @Bean
+    public DirectExchange direct() {
+        return new DirectExchange("tut.direct");
+    }
+
+    @Profile("receiver")
+    private static class ReceiverConfig {
+
+        @Bean
+        public Queue autoDeleteQueue1() {
+            return new AnonymousQueue();
+        }
+
+        @Bean
+        public Queue autoDeleteQueue2() {
+            return new AnonymousQueue();
+        }
+
+        @Bean
+        public Binding binding1a(DirectExchange direct, 
+            Queue autoDeleteQueue1) {
+            return BindingBuilder.bind(autoDeleteQueue1)
+                .to(direct)
+                .with("orange");
+        }
+
+        @Bean
+        public Binding binding1b(DirectExchange direct, 
+            Queue autoDeleteQueue1) {
+            return BindingBuilder.bind(autoDeleteQueue1)
+                .to(direct)
+                .with("black");
+        }
+
+        @Bean
+        public Binding binding2a(DirectExchange direct,
+            Queue autoDeleteQueue2) {
+            return BindingBuilder.bind(autoDeleteQueue2)
+                .to(direct)
+                .with("green");
+        }
+
+        @Bean
+        public Binding binding2b(DirectExchange direct, 
+            Queue autoDeleteQueue2) {
+            return BindingBuilder.bind(autoDeleteQueue2)
+                .to(direct)
+                .with("black");
+        }
+
+        @Bean
+        public Tut4Receiver receiver() {
+            return new Tut4Receiver();
+        }
+    }
+
+    @Profile("sender")
+    @Bean
+    public Tut4Sender sender() {
+        return new Tut4Sender();
+    }
+}
+```
+
+The code for our sender class is:
+
+```java
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+
+public class Tut4Sender {
+
+    @Autowired
+    private RabbitTemplate template;
+
+    @Autowired
+    private DirectExchange direct;
+
+    private int index;
+
+    private int count;
+
+    private final String[] keys = {"orange", "black", "green"};
+
+    @Scheduled(fixedDelay = 1000, initialDelay = 500)
+    public void send() {
+        StringBuilder builder = new StringBuilder("Hello to ");
+        if (++this.index == 3) {
+            this.index = 0;
+        }
+        String key = keys[this.index];
+        builder.append(key).append(' ');
+        builder.append(Integer.toString(++this.count));
+        String message = builder.toString();
+        template.convertAndSend(direct.getName(), key, message);
+        System.out.println(" [x] Sent '" + message + "'");
+    }
+}
+```
+
+The code for Tut4Receiver.java is:
+
+```java
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.util.StopWatch;
+
+public class Tut4Receiver {
+
+    @RabbitListener(queues = "#{autoDeleteQueue1.name}")
+    public void receive1(String in) throws InterruptedException {
+        receive(in, 1);
+    }
+
+    @RabbitListener(queues = "#{autoDeleteQueue2.name}")
+    public void receive2(String in) throws InterruptedException {
+        receive(in, 2);
+    }
+
+    public void receive(String in, int receiver) throws InterruptedException {
+        StopWatch watch = new StopWatch();
+        watch.start();
+        System.out.println("instance " + receiver + " [x] Received '" + in + "'");
+        doWork(in);
+        watch.stop();
+        System.out.println("instance " + receiver + " [x] Done in " + 
+            watch.getTotalTimeSeconds() + "s");
+    }
+
+    private void doWork(String in) throws InterruptedException {
+        for (char ch : in.toCharArray()) {
+            if (ch == '.') {
+                Thread.sleep(1000);
+            }
+        }
+    }
+
+}
+```
+
+Compile as usual \(see tutorial one for maven compilation and executing the options from the jar\).
+
+```
+mvn clean package
+```
+
+In one terminal window you can run:
+
+```
+java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar 
+    --spring.profiles.active=routing,receiver 
+    --tutorial.client.duration=60000
+```
+
+and in the other temrinal window run the sender
+
+```
+java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar 
+    --spring.profiles.active=routing,sender 
+    --tutorial.client.duration=60000
+```
+
+Full source code for [Tut4Receiver.java source](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut4/Tut4Receiver.java) and [Tut4Sender.java source](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut4/Tut4Sender.java). The configuration is in[Tut4Config.java source](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut4/Tut4Config.java).
+
+Move on to tutorial 5 to find out how to listen for messages based on a pattern.
 
