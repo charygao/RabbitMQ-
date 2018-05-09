@@ -66,5 +66,7 @@ To illustrate that, consider the following setup:
 
 In this setup, we can see the direct exchange X with two queues bound to it. The first queue is bound with binding key orange, and the second has two bindings, one with binding key black and the other one with green.
 
-从图中我们可以看到，有两个队列绑定了直接交换器X。
+从图中我们可以看到，有两个队列绑定了直接交换器X。第一个队列绑定时用了orange键，第二个队列用了两个，一个是black键，另一个是green键。
+
+In such a setup a message published to the exchange with a routing key orange will be routed to queue Q1. Messages with a routing key of black or green will go to Q2. All other messages will be discarded.
 
