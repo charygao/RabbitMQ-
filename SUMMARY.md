@@ -7,4 +7,5 @@
   * [3 订阅/发布](chapter1/3-ding-9605-fa-bu.md)
   * [4 路由](chapter1/4-lu-you.md)
   * [5 主题](chapter1/5-zhu-ti.md)
+  * [6 远程过程调用（RPC）](chapter1/6-yuan-cheng-guo-cheng-diao-yong-ff08-rpc.md)
 
