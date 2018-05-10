@@ -174,5 +174,165 @@ public class Tut5Config {
 
 We setup our profiles for executing the topics as the choice of "tut5" or "topics". We then created the bean for our TopicExchange. The "receiver" profile is the ReceiverConfig defining our receiver, two AnonymousQueues as in the previous tutorial and the bindings for the topics utilizing the topic syntax. We also create the "sender" profile as the creation of the Tut5Sender class.
 
-我们将配置组的名字设置为“tut5”或“topics”，要运行主题时任选一个即可。然后我们创建了类型为TopicExchange的bean。接收者配置组为ReceiveConfig类，在其里面定义了我们的接收者，两个AnonymousQueue类型的队列，就像上一个教程那样，同时
+我们将配置组的名字设置为“tut5”或“topics”，要运行主题时任选一个即可。然后我们创建了类型为TopicExchange的bean。接收者配置组为ReceiveConfig类，在其里面定义了我们的接收者，两个AnonymousQueue类型的队列（就像上一个教程那样），同时还通过主体语法为主体定义了一系列绑定。我们还创建了发送者配置组，用于创建Tut5Sender类的bean。
+
+The Tut5Receiver again uses the @RabbitListener to receive messages from the respective topics.
+
+Tut5Receiver类同样使用了@RabbitListener来接收相应主题的消息。
+
+```java
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.util.StopWatch;
+
+public class Tut5Receiver {
+
+    @RabbitListener(queues = "#{autoDeleteQueue1.name}")
+    public void receive1(String in) throws InterruptedException {
+        receive(in, 1);
+    }
+
+    @RabbitListener(queues = "#{autoDeleteQueue2.name}")
+    public void receive2(String in) throws InterruptedException {
+        receive(in, 2);
+    }
+
+    public void receive(String in, int receiver) throws 
+        InterruptedException {
+        StopWatch watch = new StopWatch();
+        watch.start();
+        System.out.println("instance " + receiver + " [x] Received '" 
+            + in + "'");
+        doWork(in);
+        watch.stop();
+        System.out.println("instance " + receiver + " [x] Done in " 
+            + watch.getTotalTimeSeconds() + "s");
+    }
+
+    private void doWork(String in) throws InterruptedException {
+        for (char ch : in.toCharArray()) {
+            if (ch == '.') {
+                Thread.sleep(1000);
+            }
+        }
+    }
+}
+```
+
+The code for Tut5Sender.java:
+
+以下为Tut5Sender.java的代码：
+
+```java
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+
+public class Tut5Sender {
+
+    @Autowired
+    private RabbitTemplate template;
+
+    @Autowired
+    private TopicExchange topic;
+
+
+    private int index;
+
+    private int count;
+
+    private final String[] keys = {"quick.orange.rabbit", 
+            "lazy.orange.elephant", "quick.orange.fox",
+            "lazy.brown.fox", "lazy.pink.rabbit", "quick.brown.fox"};
+
+    @Scheduled(fixedDelay = 1000, initialDelay = 500)
+    public void send() {
+        StringBuilder builder = new StringBuilder("Hello to ");
+        if (++this.index == keys.length) {
+            this.index = 0;
+        }
+        String key = keys[this.index];
+        builder.append(key).append(' ');
+        builder.append(Integer.toString(++this.count));
+        String message = builder.toString();
+        template.convertAndSend(topic.getName(), key, message);
+        System.out.println(" [x] Sent '" + message + "'");
+    }
+
+}
+```
+
+Compile and run the examples as described in Tutorial 1 . Or if you have been following along through the tutorials you only need to do the following:
+
+像教程1描述的那样去编译并运行实例代码。或者如果你是一直跟着教程学习的，那么你只需接着跟着往下做：
+
+To build the project:
+
+先构建项目：
+
+```
+mvn clean package
+```
+
+To execute the sender and receiver with the correct profiles execute the jar with the correct parameters:
+
+接着，分别使用正确的配置组来运行发送者和接收者，运行jar包时要使用正确的参数：
+
+```
+java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar 
+    --spring.profiles.active=topics,receiver 
+    --tutorial.client.duration=60000
+java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar 
+    --spring.profiles.active=topics,sender 
+    --tutorial.client.duration=60000
+```
+
+The output from the sender will look something like:
+
+发送者进程的输出看起来是类似于下面这样的：
+
+```
+Ready ... running for 60000ms
+ [x] Sent 'Hello to lazy.orange.elephant 1'
+ [x] Sent 'Hello to quick.orange.fox 2'
+ [x] Sent 'Hello to lazy.brown.fox 3'
+ [x] Sent 'Hello to lazy.pink.rabbit 4'
+ [x] Sent 'Hello to quick.brown.fox 5'
+ [x] Sent 'Hello to quick.orange.rabbit 6'
+ [x] Sent 'Hello to lazy.orange.elephant 7'
+ [x] Sent 'Hello to quick.orange.fox 8'
+ [x] Sent 'Hello to lazy.brown.fox 9'
+ [x] Sent 'Hello to lazy.pink.rabbit 10'
+```
+
+And the receiver will respond with the following output:
+
+然后接收者进程的响应输出如下面这样：
+
+```
+instance 1 [x] Received 'Hello to lazy.orange.elephant 1'
+instance 2 [x] Received 'Hello to lazy.orange.elephant 1'
+instance 2 [x] Done in 2.005s
+instance 1 [x] Done in 2.005s
+instance 1 [x] Received 'Hello to quick.orange.fox 2'
+instance 2 [x] Received 'Hello to lazy.brown.fox 3'
+instance 1 [x] Done in 2.003s
+instance 2 [x] Done in 2.003s
+instance 1 [x] Received 'Hello to lazy.pink.rabbit 4'
+instance 2 [x] Received 'Hello to lazy.pink.rabbit 4'
+instance 1 [x] Done in 2.006s
+instance 2 [x] Done in 2.006s
+```
+
+Have fun playing with these programs. Note that the code doesn't make any assumption about the routing or binding keys, you may want to play with more than two routing key parameters.
+
+
+
+\(Full source code for [Tut5Receiver.java source](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut5/Tut5Receiver.java) and [Tut5Sender.java source](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut5/Tut5Sender.java). The configuration is in [Tut5Config.java source](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut5/Tut5Config.java). \)
+
+（完整的代码请参阅[Tut5Receiver.java](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut5/Tut5Receiver.java)和[Tut5Sender.java](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut5/Tut5Sender.java) 。配置在[Tut5Config.java](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut5/Tut5Config.java)里）
+
+Next, find out how to do a round trip message as a remote procedure call in tutorial 6.
+
+接下来，我们将进入教程6，看看如何进行消息交互，即远程过程调用。
 
