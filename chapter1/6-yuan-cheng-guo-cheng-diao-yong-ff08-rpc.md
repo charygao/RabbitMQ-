@@ -6,6 +6,8 @@ In the second tutorial we learned how to use _Work Queues_ to distribute time-co
 
 But what if we need to run a function on a remote computer and wait for the result? Well, that's a different story. This pattern is commonly known as _Remote Procedure Call or RPC_.
 
+但如果我们需要在一个远程电脑上运行一个函数并且等待运行结果的话要怎么办呢？这就变成另一个问题了。这种模式通常被称为远程过程调用（Remote Procedure Call），或者简称RPC。
+
 In this tutorial we're going to use RabbitMQ to build an RPC system: a client and a scalable RPC server. As we don't have any time-consuming tasks that are worth distributing, we're going to create a dummy RPC service that returns Fibonacci numbers.
 
 ### Client interface
@@ -222,7 +224,7 @@ To request a fibonacci number run the client:
 java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar
     --spring.profiles.active=rpc,server
 java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar 
-    --spring.profiles.active=rpc,client    
+    --spring.profiles.active=rpc,client
 ```
 
 The design presented here is not the only possible implementation of a RPC service, but it has some important advantages:
