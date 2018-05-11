@@ -28,7 +28,7 @@ System.out.println(" [.] Got '" + response + "'");
 >
 > Although RPC is a pretty common pattern in computing, it's often criticised. The problems arise when a programmer is not aware whether a function call is local or if it's a slow RPC. Confusions like that result in an unpredictable system and adds unnecessary complexity to debugging. Instead of simplifying software, misused RPC can result in unmaintainable spaghetti code.
 >
-> 虽然RPC在计算领域是很常见的模式，但它通常也是受争议的。但程序员不知道一个函数调用是本地的还是慢速的RPC时就会出现一些问题。
+> 虽然RPC在计算领域是很常见的模式，但它通常也是受争议的。但程序员不知道一个函数调用是本地的还是慢速的RPC时就会出现一些问题。像这样的混乱会导致不可预知的系统，而且会给调试增加不必要的复杂性。
 >
 > Bearing that in mind, consider the following advice:
 >
