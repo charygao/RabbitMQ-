@@ -39,6 +39,8 @@ System.out.println(" [.] Got '" + response + "'");
 > * Handle error cases. How should the client react when the RPC server is down for a long time?（处理好会发生错误的场景。但RPC服务端长时间挂掉时，客户端应该做出什么反应？）
 >
 > When in doubt avoid RPC. If you can, you should use an asynchronous pipeline - instead of RPC-like blocking, results are asynchronously pushed to a next computation stage.
+>
+> 当你无法对这些问题无法做出明确回答时，就不要使用RPC。如果可以的话，你应该使用异步pipeline，而不是类似于阻塞的RPC。使用异步pipeline，计算结果可以异步推入到下一个计算阶段。
 
 ### Callback queue
 
