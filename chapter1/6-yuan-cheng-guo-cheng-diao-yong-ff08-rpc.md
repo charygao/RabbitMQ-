@@ -28,13 +28,15 @@ System.out.println(" [.] Got '" + response + "'");
 >
 > Although RPC is a pretty common pattern in computing, it's often criticised. The problems arise when a programmer is not aware whether a function call is local or if it's a slow RPC. Confusions like that result in an unpredictable system and adds unnecessary complexity to debugging. Instead of simplifying software, misused RPC can result in unmaintainable spaghetti code.
 >
-> 虽然RPC在计算领域是很常见的模式，但它通常也是受争议的。但程序员不知道一个函数调用是本地的还是慢速的RPC时就会出现一些问题。像这样的混乱会导致不可预知的系统，而且会给调试增加不必要的复杂性。
+> 虽然RPC在计算领域是很常见的模式，但它通常也是受争议的。但程序员不知道一个函数调用是本地的还是慢速的RPC时就会出现一些问题。像这样的混乱会导致不可预知的系统，而且会给调试增加不必要的复杂性。不恰当地使用RPC不仅不会简化程序，还会导致代码变得很难维护。
 >
 > Bearing that in mind, consider the following advice:
 >
-> * Make sure it's obvious which function call is local and which is remote.
-> * Document your system. Make the dependencies between components clear.
-> * Handle error cases. How should the client react when the RPC server is down for a long time?
+> 记住这一点，然后考虑一下几点建议：
+>
+> * Make sure it's obvious which function call is local and which is remote.（确保哪个函数调用是本地的，哪个是远程的。）
+> * Document your system. Make the dependencies between components clear.（为你的系统做好文档。清晰化组件间的依赖。）
+> * Handle error cases. How should the client react when the RPC server is down for a long time?（处理好会发生错误的场景。但RPC服务端长时间挂掉时，客户端应该做出什么反应？）
 >
 > When in doubt avoid RPC. If you can, you should use an asynchronous pipeline - instead of RPC-like blocking, results are asynchronously pushed to a next computation stage.
 
