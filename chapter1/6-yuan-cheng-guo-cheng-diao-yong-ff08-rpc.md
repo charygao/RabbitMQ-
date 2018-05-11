@@ -10,9 +10,13 @@ But what if we need to run a function on a remote computer and wait for the resu
 
 In this tutorial we're going to use RabbitMQ to build an RPC system: a client and a scalable RPC server. As we don't have any time-consuming tasks that are worth distributing, we're going to create a dummy RPC service that returns Fibonacci numbers.
 
-### Client interface
+在本节教程里，我们将用RabbitMQ来构建一个RPC系统，这个系统包括一个客户端和一个可伸缩的RPC服务端。由于我们没有什么耗时任务值得分发，所以我们准备创建一个假的RPC服务，这个服务返回斐波那契（Fibonacci）数值。
 
-To illustrate how an RPC service could be used we're going to change the names of our profiles from "Sender" and "Receiver to "Client" and "Server". When we call the server we will get back the fibonacci of the argument we call with.
+### Client interface（客户端接口）
+
+To illustrate how an RPC service could be used we're going to change the names of our profiles from "Sender" and "Receiver” to "Client" and "Server". When we call the server we will get back the fibonacci of the argument we call with.
+
+为了说明RPC服务可以如何被使用，我们准备修改我们的配置组，将名称从“Sender”和“Receiver”换成“Client”和“Server”。当我们调用服务端时，我们将会获得我们传入的参数所对应的斐波那契数值。
 
 ```java
 Integer response = (Integer) template.convertSendAndReceive
@@ -20,9 +24,11 @@ Integer response = (Integer) template.convertSendAndReceive
 System.out.println(" [.] Got '" + response + "'");
 ```
 
-> #### A note on RPC
+> #### A note on RPC（RPC的注意点）
 >
 > Although RPC is a pretty common pattern in computing, it's often criticised. The problems arise when a programmer is not aware whether a function call is local or if it's a slow RPC. Confusions like that result in an unpredictable system and adds unnecessary complexity to debugging. Instead of simplifying software, misused RPC can result in unmaintainable spaghetti code.
+>
+> 虽然RPC在计算领域是很常见的模式，但它通常也是受争议的。但程序员不知道一个函数调用是本地的还是慢速的RPC时就会出现一些问题。
 >
 > Bearing that in mind, consider the following advice:
 >
