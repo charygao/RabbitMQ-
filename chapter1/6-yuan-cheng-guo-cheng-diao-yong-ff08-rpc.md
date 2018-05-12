@@ -42,9 +42,11 @@ System.out.println(" [.] Got '" + response + "'");
 >
 > 当你无法对这些问题无法做出明确回答时，就不要使用RPC。如果可以的话，你应该使用异步pipeline，而不是类似于阻塞的RPC。使用异步pipeline，计算结果可以异步推入到下一个计算阶段。
 
-### Callback queue
+### Callback queue（回调队列）
 
 In general doing RPC over RabbitMQ is easy. A client sends a request message and a server replies with a response message. In order to receive a response we need to send a 'callback' queue address with the request. Spring-amqp's RabbitTemplate handles the callback queue for us when we use the above 'convertSendAndReceive\(\)' method. There is no need to do any other setup when using the RabbitTemplate. For a thorough explanation please see [Request/Reply Message](http://docs.spring.io/spring-amqp/reference/htmlsingle/#request-reply).
+
+一般情况下，在RabbitMQ上实现RPC挺简单的。客户端发送请求消息然后服务端返回一个响应消息。为了接收响应消息，我们必须
 
 > #### Message properties
 >
