@@ -46,20 +46,29 @@ System.out.println(" [.] Got '" + response + "'");
 
 In general doing RPC over RabbitMQ is easy. A client sends a request message and a server replies with a response message. In order to receive a response we need to send a 'callback' queue address with the request. Spring-amqp's RabbitTemplate handles the callback queue for us when we use the above 'convertSendAndReceive\(\)' method. There is no need to do any other setup when using the RabbitTemplate. For a thorough explanation please see [Request/Reply Message](http://docs.spring.io/spring-amqp/reference/htmlsingle/#request-reply).
 
-一般情况下，在RabbitMQ上实现RPC挺简单的。客户端发送请求消息然后服务端返回一个响应消息。为了接收响应消息，我们必须。在我们使用“convertSendAndReceive\(\)”方法时，Spring-amqp框架的RabbitTemplate类为我们做好了回调队列的处理工作。
+一般情况下，在RabbitMQ上实现RPC挺简单的。客户端发送请求消息然后服务端返回一个响应消息。为了接收响应消息，我们必须传送一个用于处理请求的回调队列。在我们使用“convertSendAndReceive\(\)”方法时，Spring-amqp框架的RabbitTemplate类为我们做好了回调队列的处理工作。使用RabbitTemplate类时无需在做其它配置。若想看完整的文档，请参阅[请求/发送消息](https://legacy.gitbook.com/book/jiapengcai/rabbitmq/edit#)。
 
-> #### Message properties
+> #### Message properties（消息属性）
 >
 > The AMQP 0-9-1 protocol predefines a set of 14 properties that go with a message. Most of the properties are rarely used, with the exception of the following:
 >
+> AMQP 0-9-1协议预定义了14个消息属性。大部分的属性都很少用到，除了以下几个：
+>
 > * deliveryMode: Marks a message as persistent \(with a value of 2\) or transient \(any other value\). You may remember this property from the second tutorial.
+> * deliveryMode：将消息标记为要持久化（此时属性值为2）或者瞬态（此时属性值为2以外的其它数字）。教程2里提到过这   
+>   个属性，你应该还记得。
 > * contentType: Used to describe the mime-type of the encoding. For example for the often used JSON encoding it is a good practice to set this property to: application/json.
+> * contentType：用来描述编码的mime类型。例如，对于常用的JSON格式，最好将这个属性值设为application/json。
 > * replyTo: Commonly used to name a callback queue.
+> * replayTo：通常用来命名一个回调队列。
 > * correlationId: Useful to correlate RPC responses with requests.
+> * correlationId：该属性用来将RPC响应与请求进行关联。
 
-### Correlation Id
+### Correlation Id（关联Id）
 
 Spring-amqp allows you to focus on the message style you're working with and hide the details of message plumbing required to support this style. For example, typically the native client would create a callback queue for every RPC request. That's pretty inefficient so an alternative is to create a single callback queue per client.
+
+Spring-amqp能让你专注于正在处理的消息类型，并隐藏了支持该类型的消息所需的消息管道的实现细节。例如，通常情况下，本地客户端会为每个RPC请求都创建一个回调队列。这种做法效率很低，所以替换方案是每个客户端只创建一个回调队列。
 
 That raises a new issue, having received a response in that queue it's not clear to which request the response belongs. That's when thecorrelationIdproperty is used. Spring-amqp automatically sets a unique value for every request. In addition it handles the details of matching the response with the correct correlationID.
 
