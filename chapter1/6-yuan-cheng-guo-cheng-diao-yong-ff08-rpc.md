@@ -70,7 +70,7 @@ Spring-amqp allows you to focus on the message style you're working with and hid
 
 Spring-amqp能让你专注于正在处理的消息类型，并隐藏了支持该类型的消息所需的消息管道的实现细节。例如，通常情况下，本地客户端会为每个RPC请求都创建一个回调队列。这种做法效率很低，所以替换方案是每个客户端只创建一个回调队列。
 
-That raises a new issue, having received a response in that queue it's not clear to which request the response belongs. That's when thecorrelationIdproperty is used. Spring-amqp automatically sets a unique value for every request. In addition it handles the details of matching the response with the correct correlationID.
+That raises a new issue, having received a response in that queue it's not clear to which request the response belongs. That's when the correlationId property is used. Spring-amqp automatically sets a unique value for every request. In addition it handles the details of matching the response with the correct correlationId.
 
 One reason that spring-amqp makes rpc style easier is that sometimes you may want to ignore unknown messages in the callback queue, rather than failing with an error. It's due to a possibility of a race condition on the server side. Although unlikely, it is possible that the RPC server will die just after sending us the answer, but before sending an acknowledgment message for the request. If that happens, the restarted RPC server will process the request again. The spring-amqp client handles the duplicate responses gracefully, and the RPC should ideally be idempotent.
 
@@ -80,13 +80,29 @@ One reason that spring-amqp makes rpc style easier is that sometimes you may wan
 
 Our RPC will work like this:
 
-* The Tut6Config will setup a new DirectExchange and a client
-* The client will leverage the convertSendAndReceive passing the exchange name, the routingKey, and the message.
-* The request is sent to an rpc\_queue\("tut.rpc"\) queue.
-* The RPC worker \(aka: server\) is waiting for requests on that queue. When a request appears, it performs the task and sends a message with the result back to the Client, using the queue from the replyTo field.
-* The client waits for data on the callback queue. When a message appears, it checks the correlationId property. If it matches the value from the request it returns the response to the application. Again, this is done automagically via the RabbitTemplate.
+我们的RPC系统
 
-## Putting it all together
+1.The Tut6Config will setup a new DirectExchange and a client
+
+   在Tut6Config文件里将建立一个新的DirectExchange和一个客户端。
+
+2.The client will leverage the convertSendAndReceive passing the exchange name, the routingKey, and the message.
+
+   客户端将使用convertSendAndReceive，并传入交换器名字，路由键和消息。
+
+3.The request is sent to an rpc\_queue\("tut.rpc"\) queue.
+
+   请求被发送到用于rpc的队列里（“tut.rpc”）。
+
+4.The RPC worker \(aka: server\) is waiting for requests on that queue. When a request appears, it performs the task and sends a message with the result back to the Client, using the queue from the replyTo field.
+
+  RPC工作者（也就是服务器）等待发送到队列里的请求。但一个请求出现时，它就执行任务，然后通过使用replyTo域里配置的队列将带有结果的消息发回给客户端。
+
+5.The client waits for data on the callback queue. When a message appears, it checks the correlationId property. If it matches the value from the request it returns the response to the application. Again, this is done automagically via the RabbitTemplate.
+
+客户端等待回调队列里的数据。当一条消息出现时，它会校验correlationId属性。如果属性值与请求匹配，它就将响应返回给应用。这个工作RabbitTemplate自动帮我们完成了。
+
+## Putting it all together（代码整合） 
 
 The Fibonacci task is a @RabbitListener and is defined as:
 
