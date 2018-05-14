@@ -242,6 +242,8 @@ The client code [Tut6Client](https://github.com/rabbitmq/rabbitmq-tutorials/blob
 
 Making the Client request is simply:
 
+发起客户端请求也很简单：
+
 ```java
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -270,11 +272,15 @@ public class Tut6Client {
 
 Using the project setup as defined in \(see tutorial one\) with start.spring.io and SpringInitialzr the preparing the runtime is the same as the other tutorials:
 
+
+
 ```
 mvn clean package
 ```
 
 We can start the server with:
+
+我们可以用以下命令来启动服务端：
 
 ```
 java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar 
@@ -283,6 +289,8 @@ java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar
 ```
 
 To request a fibonacci number run the client:
+
+若要请求斐波那契数值，可以用以下命令来启动客户端：
 
 ```
 java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar
@@ -293,19 +301,41 @@ java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar
 
 The design presented here is not the only possible implementation of a RPC service, but it has some important advantages:
 
-* If the RPC server is too slow, you can scale up by just running another one. Try running a second
-  RPCServer in a new console.
-* On the client side, the RPC requires sending and receiving only one message with one method. No synchronous calls like
-  queueDeclare are required. As a result the RPC client needs only one network round trip for a single RPC request.
+以上展示的设计不仅仅是实现RPC服务的一种方式，而且还有一些重要的优点：
+
+1.If the RPC server is too slow, you can scale up by just running another one. Try running a second RPC Server in a new console.
+
+如果RPC服务端太慢，你可以仅仅通过额外再运行一个服务端来增大其规模。可以尝试着在新的控制台里运行第二个RPC服务端。
+
+2.On the client side, the RPC requires sending and receiving only one message with one method. No synchronous calls like queueDeclare are required. As a result the RPC client needs only one network round trip for a single RPC request.
+
+在客户端这一边，RPC要求只能一个方法里发送和接收一条消息。不需要像queueDelare那样的同步调用。于是，对于一个RPC请求，RPC客户端只需一个网络回路。
 
 Our code is still pretty simplistic and doesn't try to solve more complex \(but important\) problems, like:
 
-* How should the client react if there are no servers running?
-* Should a client have some kind of timeout for the RPC?
-* If the server malfunctions and raises an exception, should it be forwarded to the client?
-* Protecting against invalid incoming messages \(eg checking bounds, type\) before processing.
+我们的代码仍然很简单，而且没有处理很多复杂（但重要）的问题，像：
+
+1.How should the client react if there are no servers running?
+
+如果没有服务端正在运行，客户端应该做出什么反应？
+
+2.Should a client have some kind of timeout for the RPC?
+
+客户端需要为RPC做超时处理吗？
+
+3.If the server malfunctions and raises an exception, should it be forwarded to the client?
+
+如果服务端出现故障并引起了异常，它是否应该告知客户端？
+
+4.Protecting against invalid incoming messages \(eg checking bounds, type\) before processing.
+
+在处理进来的消息之前先处理掉无效的消息（如校验边界，类型）。
 
 > If you want to experiment, you may find the [management UI](https://www.rabbitmq.com/management.html) useful for viewing the queues.
+>
+> 如果你想做些实验，可以通过[管理界面](https://legacy.gitbook.com/book/jiapengcai/rabbitmq/edit#)来查看队列，你会发现它很有用的。
 
 There is one other nice feature of RabbitMQ. It is featured as a supported tile on Pivotal Cloud Foundry \(PCF\) as a service.
+
+RabbitMQ还有另一个很棒的功能。它作为服务在Pivotal Cloud Foundry（PCF）上被支持。
 
