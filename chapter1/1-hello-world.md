@@ -242,7 +242,7 @@ You'll notice that spring-amqp removes the boiler plate code leaving you with on
 
 The receiver is equally simple. We annotate our Receiver class with @RabbitListener and pass in the name of the queue. We then annotate our receive method with @RabbitHandler passing in the payload that has been pushed to the queue.
 
-接收者类同样很简单。我们用@RabbitListener来注解我们的接收者类，并传入队列的名字。然后我们用@RabbitHandler来注解我们的接收方法，接收的参数为推入队列里的负载。
+接收者类很简单。我们用@RabbitListener来注解我们的接收者类，并往注解里传入队列的名字。然后我们用@RabbitHandler来注解我们的接收方法，接收的参数为推入队列里的负载。
 
 ```java
 package org.springframework.amqp.tutorials.tut1;
@@ -264,7 +264,7 @@ public class Tut1Receiver {
 
 The app uses Spring Profiles to control what tutorial it's running, and whether it's a Sender or Receiver. Choose which tutorial to run by using the profile. For example:
 
-程序通过使用Spring配置文件来控制正在运行的是哪个教程代码，控制正在运行的是发送者还是接收者。通过使用不同的配置文件来运行不同的教程代码。例如：
+程序通过使用Spring配置组来控制正在运行的是哪个教程代码，以及控制正在运行的是发送者还是接收者。我们选择使用不同的配置组来运行不同的教程代码。例如：
 
 ```
 - {tut1|hello-world},{sender|receiver}
@@ -295,7 +295,7 @@ java -jar rabbitmq-tutorials.jar --spring.profiles.active=hello-world,receiver
 >
 > You may wish to see what queues RabbitMQ has and how many messages are in them. You can do it \(as a privileged user\) using the rabbitmqctl tool:
 >
-> 你可能希望看一下RabbitMQ有哪些队列，这些队列里有多少消息。你可以通过使用rabbitmqctl工具来查看（作为一个授权用户）：
+> 你可能希望看一下RabbitMQ有哪些队列，这些队列里有多少消息。你可以通过使用rabbitmqctl工具来查看（但你必须是个授权用户）：
 >
 > ```
 > sudo rabbitmqctl list_queues
@@ -311,5 +311,5 @@ java -jar rabbitmq-tutorials.jar --spring.profiles.active=hello-world,receiver
 
 Time to move on to part 2 and build a simple _work queue_.
 
-接下来我们开始第2部份，并构建一个简单的工作队列。
+接下来我们开始教程的第2部份，并构建一个简单的工作队列。
 
