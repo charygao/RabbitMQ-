@@ -18,7 +18,7 @@ This concept is especially useful in web applications where it's impossible to h
 
 In the previous part of this tutorial we sent a message containing "Hello World!". Now we'll be sending strings that stand for complex tasks. We don't have a real-world task, like images to be resized or pdf files to be rendered, so let's fake it by just pretending we're busy - by using the Thread.sleep\(\) function. We'll take the number of dots in the string as its complexity; every dot will account for one second of "work". For example, a fake task described by Hello... will take three seconds.
 
-在教程1里，我们实现了如何发送包含“Hello World!”的消息。现在，我们将发送表示复杂任务的字符串。由于我们没有真实的任务，如调整图片大小或者渲染pdf文件，所以我们通过使用Thread.sleep\(\)函数来让任务显得很忙，以此达到耗时任务的效果。我们将在字符串中用点号的个数来象征复杂度，每个点号将耗费整个任务执行的一秒。例如，Hello...代表任务将执行三秒。
+在教程1里，我们实现了如何发送包含“Hello World!”的消息。现在，我们将发送表示复杂任务的字符串。由于我们没有真实的任务，如调整图片大小或者渲染pdf文件，所以我们通过使用Thread.sleep\(\)函数来模拟繁忙的耗时任务。我们将在字符串中用点号的个数来表示复杂度，点号的个数表示整个任务执行秒的秒数。例如，Hello...表示模拟任务需要执行三秒。
 
 Please see the setup in first tutorial if you have not setup the project. We will follow the same pattern as in the first tutorial: 1\) create a package \(tut2\) and create a Tut2Config, Tut2Receiver, and Tut2Sender. Start by creating a new package \(tut2\) where we'll place our three classes. In the configuration class we setup two profiles, the label for the tutorial \("tut2"\) and the name of the pattern \("work-queues"\). We leverage spring to expose the queue as a bean. We setup the receiver as a profile and define two beans to correspond to the workers in our diagram above： receiver1 and receiver2. Finally, we define a profile for the sender and define the sender bean. The configuration is now done.
 
