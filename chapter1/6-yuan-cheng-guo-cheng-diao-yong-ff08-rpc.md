@@ -84,27 +84,29 @@ Our RPC will work like this:
 
 1.The Tut6Config will setup a new DirectExchange and a client
 
-   在Tut6Config文件里将建立一个新的DirectExchange和一个客户端。
+在Tut6Config文件里将建立一个新的DirectExchange和一个客户端。
 
 2.The client will leverage the convertSendAndReceive passing the exchange name, the routingKey, and the message.
 
-   客户端将使用convertSendAndReceive，并传入交换器名字，路由键和消息。
+客户端将使用convertSendAndReceive，并传入交换器名字，路由键和消息。
 
 3.The request is sent to an rpc\_queue\("tut.rpc"\) queue.
 
-   请求被发送到用于rpc的队列里（“tut.rpc”）。
+请求被发送到用于rpc的队列里（“tut.rpc”）。
 
 4.The RPC worker \(aka: server\) is waiting for requests on that queue. When a request appears, it performs the task and sends a message with the result back to the Client, using the queue from the replyTo field.
 
-  RPC工作者（也就是服务器）等待发送到队列里的请求。但一个请求出现时，它就执行任务，然后通过使用replyTo域里配置的队列将带有结果的消息发回给客户端。
+RPC工作者（也就是服务器）等待发送到队列里的请求。但一个请求出现时，它就执行任务，然后通过使用replyTo域里配置的队列将带有结果的消息发回给客户端。
 
 5.The client waits for data on the callback queue. When a message appears, it checks the correlationId property. If it matches the value from the request it returns the response to the application. Again, this is done automagically via the RabbitTemplate.
 
 客户端等待回调队列里的数据。当一条消息出现时，它会校验correlationId属性。如果属性值与请求匹配，它就将响应返回给应用。这个工作RabbitTemplate自动帮我们完成了。
 
-## Putting it all together（代码整合） 
+## Putting it all together（代码整合）
 
 The Fibonacci task is a @RabbitListener and is defined as:
+
+计算斐波那契的任务的定义如下：
 
 ```java
 public int fib(int n) {
@@ -113,6 +115,8 @@ public int fib(int n) {
 ```
 
 We declare our fibonacci function. It assumes only valid positive integer input. \(Don't expect this one to work for big numbers, and it's probably the slowest recursive implementation possible\).
+
+我们声明了斐波那契函数。它假定输入的参数是有效的正整数。（不要期望它能用于大数的场景，而且这种方式是最低效的递归实现）。
 
 The code for our Tut6Config [Tut6Config](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut6/Tut6Config.java) looks like this:
 
