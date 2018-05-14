@@ -219,7 +219,7 @@ channel.basicAck()
 
 Acknowledgement must be sent on the same channel the delivery it is for was received on. Attempts to acknowledge using a different channel will result in a channel-level protocol exception. See the doc guide on confirmations to learn more. Spring AMQP generally takes care of this but when used in combination with code that uses RabbitMQ Java client directly, this is something to keep in mind.
 
-消息确认必须在与接收信息相同的通道（channel）上进行发送。试图使用不同的通道来进行确认将导致通道级别的协议异常。若想更详细了解，可以参阅文档指南。Spring AMQP一般都会处理好这种问题，除非与直接使用了RabbitMQ的Java客户端的代码结合使用，这点要小心。
+消息确认必须在与接收信息相同的通道（channel）上进行发送。试图使用不同的通道来进行确认将导致通道级别的协议异常。若想更详细了解，可以参阅文档指南。Spring AMQP一般都会处理好这种问题，但在与直接使用RabbitMQ的Java客户端的代码结合使用，这点要小心。
 
 > #### Forgotten acknowledgment（被遗忘的确认）
 >
