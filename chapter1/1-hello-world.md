@@ -230,7 +230,7 @@ public class Tut1Sender {
 
 You'll notice that spring-amqp removes the boiler plate code leaving you with only the logic of the messaging to be concerned about. We autowire in the queue that was configured in our bean definition in the Tut1Config class and like many spring connection abstractions, we wrap the boilerplate rabbitmq client classes with a RabbitTemplate that can be autowired into the sender. All that is left is to create a message and invoke the template's convertAndSend method passing in the queue name from the bean we defined and the message we just created.
 
-你会发觉，spring-amqp移除了样板化代码，让你专注于消息发送逻辑。我们自动注入了队列queue，它已经在前面的Tut1Config类里做了配置。就像大多数spring连接抽象，我们用RabbitTemplate包装了样板化的rabbitmq客户端类，并将它自动注入到发送者类里。我们要做的就是创建一条信息，并调用template的convertAndSend方法，往里传入我们定义的队列bean的名字以及我们刚创建的信息。
+你会发觉，spring-amqp移除了样板化代码，让你只专注于消息发送逻辑。我们自动注入了队列queue，它已经在前面的Tut1Config类里做了配置。就像大多数Spring连接抽象，我们用RabbitTemplate包装了样板化的rabbitmq客户端类，并将它自动注入到发送者类里。我们要做的就是创建一条信息，并调用template的convertAndSend方法，传入我们定义的队列bean的名字以及我们刚创建的信息。
 
 > #### Sending doesn't work!（无法发送！）
 >
