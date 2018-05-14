@@ -12,7 +12,7 @@ RabbitMQ和邮局之间的主要不同点是，RabbitMQ不跟纸打交道，它�
 
 RabbitMQ, and messaging in general, uses some jargon.
 
-RabbitMQ，一般称它为消息队列，使用了一些术语。
+RabbitMQ，一般称它为消息队列，它使用了一些术语。
 
 _Producing means nothing more than sending. A program that sends messages is a producer_:
 
