@@ -20,9 +20,9 @@ In the previous part of this tutorial we sent a message containing "Hello World!
 
 在教程1里，我们实现了如何发送包含“Hello World!”的消息。现在，我们将发送表示复杂任务的字符串。由于我们没有真实的任务，如调整图片大小或者渲染pdf文件，所以我们通过使用Thread.sleep\(\)函数来模拟繁忙的耗时任务。我们将在字符串中用点号的个数来表示复杂度，点号的个数表示整个任务执行秒的秒数。例如，Hello...表示模拟任务需要执行三秒。
 
-Please see the setup in first tutorial if you have not setup the project. We will follow the same pattern as in the first tutorial: 1\) create a package \(tut2\) and create a Tut2Config, Tut2Receiver, and Tut2Sender. Start by creating a new package \(tut2\) where we'll place our three classes. In the configuration class we setup two profiles, the label for the tutorial \("tut2"\) and the name of the pattern \("work-queues"\). We leverage spring to expose the queue as a bean. We setup the receiver as a profile and define two beans to correspond to the workers in our diagram above： receiver1 and receiver2. Finally, we define a profile for the sender and define the sender bean. The configuration is now done.
+Please see the setup in first tutorial if you have not setup the project. We will follow the same pattern as in the first tutorial:  create a package \(tut2\) and create a Tut2Config, Tut2Receiver, and Tut2Sender. Start by creating a new package \(tut2\) where we'll place our three classes. In the configuration class we setup two profiles, the label for the tutorial \("tut2"\) and the name of the pattern \("work-queues"\). We leverage spring to expose the queue as a bean. We setup the receiver as a profile and define two beans to correspond to the workers in our diagram above： receiver1 and receiver2. Finally, we define a profile for the sender and define the sender bean. The configuration is now done.
 
-如果你还未配置好项目，请见第一个教程的配置过程。我们将采用与第一个教程相同的配置，新建一个包目录（tut2）并创建一个Tut2Config的配置类，一个Tut2Receiver的信息接收类，以及一个Tut2Sender的信息发送类。首先新建好新的包目录（tut2），我们将在这个包下面放刚说到的那三个类。在配置类里，我们将配置两个配置文件，一个作为当前教程的标签（“tut2”），一个作为当前模式的名字（“work-queue”）。我们利用Spring框架将队列暴露为一个bean。我们设置一个接受者配置文件，并定义两个bean来对应于上面图中的两个消费者：receiver1和receiver2。最后，我们会定义一个发送者配置文件，并定义作为发送者的bean。这样配置就结束了。
+如果你还未建立配置好项目，请见教程1的配置过程。我们将采用与教程1相同的方式，新建一个包目录（tut2）并创建一个名为Tut2Config的配置类，一个名为Tut2Receiver的消息接收类，以及一个名为Tut2Sender的消息发送类。首先新建包目录（tut2），我们将在这个包下面放刚说到的那三个类。在配置类里，我们将配置两个配置组，一个作为当前教程的标签（“tut2”），一个作为当前RabbitMQ使用模式的名字（“work-queue”）。我们利用Spring框架将队列暴露为一个bean。我们设置一个接受者配置组，并定义两个bean来对应于上面图中的两个消费者：receiver1和receiver2。最后，我们会定义一个发送者配置组，并定义作为发送者的bean。这样配置就结束了。
 
 ```java
 import org.springframework.amqp.core.Queue;
@@ -65,7 +65,7 @@ public class Tut2Config {
 
 We will modify the sender to provide a means for identifying whether its a longer running task by appending a dot to the message in a very contrived fashion using the same method on the RabbitTemplate to publish the message, convertAndSend. The documentation defines this as, "Convert a Java object to an Amqp Message and send it to a default exchange with a default routing key."
 
-我们将对发送者类进行修改，在发送方法中，通过人为地在消息后面添加点号来识别当前任务是否为耗时的，并依旧使用RabbitTemplate的convertAndSend方法来发布消息。文档把convertAndSend方法定义为，“将一个Java对象转换成一个Amqp消息，并用一个默认路由键（routing key）将其发送到一个默认的exchange里。”
+我们将对发送者类进行修改，在发送方法中，通过人为地在消息后面添加点号来识别当前任务是否耗时，并依旧使用RabbitTemplate的convertAndSend方法来发布消息。文档把convertAndSend方法定义为，“将一个Java对象转换成一个Amqp消息，并用一个默认路由键（routing key）将其发送到一个默认的exchange里。”
 
 ```java
 import org.springframework.amqp.core.Queue;
@@ -106,7 +106,7 @@ public class Tut2Sender {
 
 Our receiver, Tut2Receiver, simulates an arbitary length for a fake task in the doWork\(\) method where the number of dots translates into the number of seconds the work will take. Again, we leverage a @RabbitListener on the "hello" queue and a @RabbitHandler to receive the message. The instance that is consuming the message is added to our monitor to show which instance, the message and the length of time to process the message.
 
-我们的接收者类，Tut2Receiver，在doWork\(\)方法里根据消息所带点号的个数，将其转换成任务所需消耗的秒数，从而模拟了任务的任意长度。同样地，我们对“hello”队列使用了@RabbitListener注解，并使用@RabbitHandler来接收消息。同时，用一个编号来标识正在消费消息的实例，并将它假如我们的监控中，最终打印出实例编号，消息内容以及处理消息所耗费的时长。
+我们的接收者类，Tut2Receiver，在doWork\(\)方法里根据消息所带点号的个数，将其转换成任务所需消耗的秒数，以此模拟了任意任务的长度。同样地，我们对“hello”队列使用了@RabbitListener注解，并使用@RabbitHandler来接收消息。同时，用一个编号来标识正在消费消息的实例，并将它加入我们的监控中，最终打印出实例编号，消息内容以及处理消息所耗费的时长。
 
 ```java
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -144,7 +144,7 @@ public class Tut2Receiver {
 }
 ```
 
-### Putting it all together
+### Putting it all together（代码整合）
 
 Compile them using mvn package and run with the following options
 
