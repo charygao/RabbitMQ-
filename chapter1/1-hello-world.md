@@ -16,7 +16,7 @@ RabbitMQ，一般称它为消息队列，它使用了一些术语。
 
 _Producing means nothing more than sending. A program that sends messages is a producer_:
 
-消息生产其实就是消息发送。发送消息的程序就是一个生产者：
+消息生产其实就是消息发送。发送消息的程序就是生产者：
 
 ![](http://www.rabbitmq.com/img/tutorials/producer.png)
 
