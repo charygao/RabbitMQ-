@@ -28,7 +28,7 @@ A _queue_ is the name for a post box which lives inside RabbitMQ. Although messa
 
 _Consuming_ has a similar meaning to receiving. A _consumer_ is a program that mostly waits to receive messages:
 
-消息消费在意思上类似于消息接收。等待接收消息的程序就是一个消费者：
+消息消费其实就是消息接收。等待接收消息的程序就是一个消费者：
 
 ![](http://www.rabbitmq.com/img/tutorials/consumer.png)
 
@@ -40,35 +40,33 @@ Note that the producer, consumer, and broker do not have to reside on the same h
 
 In this part of the tutorial we'll write two programs using the spring-amqp library; a producer that sends a single message, and a consumer that receives messages and prints them out. We'll gloss over some of the detail in the Spring-amqp API, concentrating on this very simple thing just to get started. It's a "Hello World" of messaging.
 
-下面我们将写两个使用spring-amqp类库的程序；其中一个是发送单条消息的生产者，另一个是消费者，它接收消息并将它们打印出来。我们将掩盖Spring-amqp API的一些细节，专注于即将开始的东西。它就是“Hello World”消息队列。
+在本教程里，我们将写两个基于spring-amqp类库的程序，其中一个是发送单条消息的生产者，另一个是消费者，它接收消息并将它们打印出来。我们将省略Spring-amqp API的一些细节，专注于即将开始的东西。它是消息队列版本的“Hello World”程序。
 
 In the diagram below, "P" is our producer and "C" is our consumer. The box in the middle is a queue - a message buffer that RabbitMQ keeps on behalf of the consumer.
 
-在下面的图中，“P”是我们的生产者，“C”是我们的消费者。图中间的箱子是一个队列，也就是RabbitMQ保存的消息缓存，为了给消费者用：
+在下面的图中，“P”是我们的生产者，“C”是我们的消费者。图中间的箱子是一个队列，也就是RabbitMQ给消费者用的的消息缓存：
 
 ![](http://www.rabbitmq.com/img/tutorials/python-one.png)
 
-> #### The Spring AMQP Framework
+> #### The Spring AMQP Framework（Spring AMQP框架）
 >
 > RabbitMQ speaks multiple protocols. This tutorial uses AMQP 0-9-1, which is an open, general-purpose protocol for messaging. There are a number of clients for RabbitMQ in many different languages.
 >
-> #### Spring AMQP框架
->
-> RabbitMQ支持多种协议。本教程使用AMQP 0-9-1协议，它是一个开放，通用的消息队列协议。很多语言都提供了RabbitMQ客户端。
+> RabbitMQ支持多种协议。本教程使用AMQP 0-9-1协议，它是一个开放，通用的消息队列协议。很多编程语言都提供了RabbitMQ客户端。
 
-Spring AMQP leverages Spring Boot for configuration and dependency management. Spring supports maven or gradle but for this tutorial we'll select maven with Spring Boot 1.5.2. Open the [Spring Initializr](http://start.spring.io/) and provide: the group id \(e.g. org.springframework.amqp.tutorials\) the artifact id \(e.g. rabbitmq-amqp-tutorials\) Search for the amqp dependency and select the AMQP dependency.
+Spring AMQP leverages Spring Boot for configuration and dependency management. Spring supports maven or gradle but for this tutorial we'll select maven with Spring Boot 1.5.2. Open the [Spring Initializr](http://start.spring.io/) and provide: the group id \(e.g. org.springframework.amqp.tutorials\) the artifact id \(e.g. rabbitmq-amqp-tutorials\). Search for the amqp dependency and select the AMQP dependency.
 
-Spring AMQP利用Spring Boot来进行配置和依赖管理。Spring同时支持maven或者gradle，但在本教程里我们选择用Spring Boot 1.5.2的maven。我们打开[Spring Initializr](http://start.spring.io/)并提供group id（如org.springframework.amqp.tutorials）和artifact id（如rabbitmq-amqp-tutorials）。查找amqp依赖并选择AMQP依赖。（译者注：应该是搜索rabbitmq）
+Spring AMQP利用Spring Boot来进行配置和依赖管理。Spring同时支持maven或者gradle，但在本教程里我们选择用maven，同时采用Spring Boot 1.5.2版本。我们打开[Spring Initializr](http://start.spring.io/)并提供group id（如org.springframework.amqp.tutorials）和artifact id（如rabbitmq-amqp-tutorials）。查找amqp依赖并选择AMQP依赖。（译者注：应该是搜索rabbitmq）
 
 Generate the project and unzip the generated project into the location of your choice. This can now be imported into your favorite IDE. Alternatively you can work on it from your favorite editor.
 
-点击Generate Project生成项目，并将其解压到你想存放的目录。现在你可以在你喜欢的IDE里面导入这个项目。你也可以在你喜欢的编辑器上进行下一步编辑。
+点击Generate Project生成项目，下载并将其解压到你想存放的目录。现在你可以在你喜欢的IDE里面导入这个项目。你也可以在你喜欢的编辑器上进行下一步编辑。
 
 ### Configuring the project（配置项目）
 
 Spring Boot offers numerous features but we will only highlight a few here. First, Spring Boot applications have the option of providing their properties through either an application.properties or application.yml file \(there are many more options as well but this will get us going\). You'll find an application.properties file in the generated project with nothing in it. Rename application.properties to application.yml file with the following properties:
 
-Spring Boot提供了很多特性，但在这里我们只显示几个需要用到的。首先，Spring Boot应用的配置可以写在application.properties文件或者application.yml文件里（还有许多其它的方式，但对于我们，用这两种文件就足够了）。你将在生成的项目里找到一个空的application.properties文件。将这个文件重命名为application.yml，并写上这些属性：
+Spring Boot提供了很多特性，但在这里我们只显示几个需要用到的。首先，Spring Boot应用的配置可以写在application.properties文件或者application.yml文件里（还有许多其它的方式，但对于我们，用这两种文件就足够了）。你在生成的项目里将会找到一个空的application.properties文件。将这个文件重命名为application.yml，并写上这些属性：
 
 ```
 spring:
@@ -121,11 +119,11 @@ public class Tut1Config {
 
 Note that we've defined the 1st tutorial profile as either tut1, the package name, or hello-world. We use the @Configuration to let Spring know that this is a Java Configuration and in it we create the definition for our Queue \("hello"\) and define our Sender and Receiver beans.
 
-注意，我们已经将教程的第一个配置文件定义为tu1，或者hello-world。我们用@Configuration注解来让Spring知道这是个Java配置，并且在配置里我们创建了Queue\("hello"\)的定义，而且也定义了我们的发送者和接收者。
+注意，我们已经将教程的第一个配置组定义为tu1（即报名），或者hello-world。我们用@Configuration注解来让Spring知道这是个Java配置，并且在配置里我们定义了队列Queue\("hello"\)，而且也定义了我们的发送者和接收者。
 
 We will run all of our tutorials through the Boot Application now by simply passing in which profiles we are using. To enable this we will modify the generated RabbitAmqpTutorialsApplication.java with the following:
 
-现在我们将传入将要用的配置文件通过Boot Application来运行我们的教程。为了做到这一点，我们将修改生成的RabbitAmqpTutorialsApplication.java文件，如下所示：
+现在我们将传入需要用到配置组，通过Boot Application来运行我们的教程。为了做到这一点，我们将修改生成的RabbitAmqpTutorialsApplication.java文件，如下所示：
 
 ```java
 import org.springframework.boot.CommandLineRunner;
