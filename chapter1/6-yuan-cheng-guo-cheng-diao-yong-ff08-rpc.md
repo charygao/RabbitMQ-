@@ -106,7 +106,7 @@ RPC工作者（也就是服务器）等待发送到队列里的请求。但一�
 
 The Fibonacci task is a @RabbitListener and is defined as:
 
-计算斐波那契的任务的定义如下：
+计算斐波那契的任务用@RabbitListener进行标注，任务内容的定义如下：
 
 ```java
 public int fib(int n) {
@@ -118,7 +118,9 @@ We declare our fibonacci function. It assumes only valid positive integer input.
 
 我们声明了斐波那契函数。它假定输入的参数是有效的正整数。（不要期望它能用于大数的场景，而且这种方式是最低效的递归实现）。
 
-The code for our Tut6Config [Tut6Config](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut6/Tut6Config.java) looks like this:
+The code for our [Tut6Config](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut6/Tut6Config.java) looks like this:
+
+[Tut6Config](https://legacy.gitbook.com/book/jiapengcai/rabbitmq/edit#)的代码看起来是如下这样子的：
 
 ```java
 import org.springframework.amqp.core.Binding;
@@ -178,14 +180,25 @@ public class Tut6Config {
 }
 ```
 
-It setups up our profiles as "tut6" or "rpc". It also setups a "client" profile with two beans; 1\) the DirectExchange we are using and 2\) the Tut6Client itself. We also configure the "server" profile with three beans, the "tut.rpc.requests" queue, the DirextExchange, which matches the client's exchange, and the binding from the queue to the exchange with the "rpc" routing-key.
+It setups up our profiles as "tut6" or "rpc". It also setups a "client" profile with two beans; 1\) the DirectExchange we are using and 2\) the Tut6Client itself. We also configure the "server" profile with three beans, the "tut.rpc.requests" queue, the DirectExchange, which matches the client's exchange, and the binding from the queue to the exchange with the "rpc" routing-key.
+
+它建立了我们的配置组，叫“tut6”或者“rpc”。同时，还建立了一个“client”配置组，这个组里配置了两个bean：一个是我们将要用到的DirectExchange类型的交换器，一个是Tut6Client本身。我们还建立了一个“server”配置组，这个组里配置了三个bean：一个名为“tut.rpc.requests”的队列，一个与客户端交换器相匹配的DirectExchange类型的交换器，以及用名为“rpc”的路由键将队列和交换器的绑定器。
 
 The server code is rather straightforward:
 
-* As usual we start annotating our receiver method with a @RabbitListener and defining the queue its listening on.
-* Our fibanacci method calls fib\(\) with the payload parameter and returns the result
+服务端代码更直观点：
 
-The code for our RPC client [Tut6Server.java](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut6/Tut6Server.java):
+1.As usual we start annotating our receiver method with a @RabbitListener and defining the queue its listening on.
+
+像之前那样，我们先用@RabbitListener来注解我们的接收者方法，然后定义它要监听的队列。
+
+2.Our fibanacci method calls fib\(\) with the payload parameter and returns the result.
+
+我们的斐波那契方法被命名为fib\(\)，接收有效参数并返回结果。
+
+The code for our RPC server [Tut6Server.java](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut6/Tut6Server.java):
+
+以下为我们的RPC服务端代码[Tut6Server.java](https://legacy.gitbook.com/book/jiapengcai/rabbitmq/edit#):
 
 ```java
 package org.springframework.amqp.tutorials.tut6;
@@ -213,9 +226,19 @@ public class Tut6Server {
 
 The client code [Tut6Client](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut6/Tut6Client.java) is as easy as the server:
 
-* We autowire the RabbitTemplate and the DirectExchange bean as defined in the Tut6Config.
-* We invoke template.convertSendAndReceive with the parameters exchange name, routing key and message.
-* We print the result
+客户端代码[Tut6Client](https://legacy.gitbook.com/book/jiapengcai/rabbitmq/edit#)与服务端代码一样简单：
+
+1.We autowire the RabbitTemplate and the DirectExchange bean as defined in the Tut6Config.
+
+我们自动注入Tut6Config里定义的类型为RabbitTemplate和DirectExchange的bean。
+
+2.We invoke template.convertSendAndReceive with the parameters exchange name, routing key and message.
+
+我们调用template.convertSendAndReceive，传入的参数为交换器名字，路由键以及消息。
+
+3.We print the result.
+
+打印出结果。
 
 Making the Client request is simply:
 
