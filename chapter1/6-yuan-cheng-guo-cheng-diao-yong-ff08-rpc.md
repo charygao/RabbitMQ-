@@ -74,7 +74,7 @@ That raises a new issue, having received a response in that queue it's not clear
 
 One reason that spring-amqp makes rpc style easier is that sometimes you may want to ignore unknown messages in the callback queue, rather than failing with an error. It's due to a possibility of a race condition on the server side. Although unlikely, it is possible that the RPC server will die just after sending us the answer, but before sending an acknowledgment message for the request. If that happens, the restarted RPC server will process the request again. The spring-amqp client handles the duplicate responses gracefully, and the RPC should ideally be idempotent.
 
-### Summary
+### Summary（总结）
 
 ![](https://www.rabbitmq.com/img/tutorials/python-six.png)
 
@@ -271,8 +271,6 @@ public class Tut6Client {
 ```
 
 Using the project setup as defined in \(see tutorial one\) with start.spring.io and SpringInitialzr the preparing the runtime is the same as the other tutorials:
-
-
 
 ```
 mvn clean package
