@@ -198,13 +198,13 @@ At this point our queue names contain a random queue names. For example it may l
 
 此时我们的队列名字是随机的。例如，队列名字可能看起来是这样的：amq.gen-JzTY20BRgKO-HjmUJj0wLg。
 
-## Bindings
+## Bindings（绑定器）
 
 ![](https://www.rabbitmq.com/img/tutorials/bindings.png)
 
 We've already created a fanout exchange and a queue. Now we need to tell the exchange to send messages to our queue. That relationship between exchange and a queue is called a _binding_. In the above Tut3Config you can see that we have two bindings, one for each AnonymousQueue.
 
-我们已经创建了一个广播交换器和一个队列。现在我们需要让交换器将消息发送到我们的队列里。用于连接交换器和队列的对象被称为绑定（binding）。在上面的Tut3Config里，你会发现我们配置了两个绑定，分别对应一个AnonymousQueue。
+我们已经创建了一个广播交换器和一个队列。现在我们需要让交换器将消息发送到我们的队列里。用于连接交换器和队列的对象被称为绑定器（binding）。在上面的Tut3Config里，你会发现我们配置了两个绑定器，分别对应一个AnonymousQueue。
 
 ```java
 @Bean
@@ -224,7 +224,7 @@ public Binding binding1(FanoutExchange fanout,
 > rabbitmqctl list_bindings
 > ```
 
-## Putting it all together
+## Putting it all together（代码整合）
 
 ![](https://www.rabbitmq.com/img/tutorials/python-three-overall.png)
 
