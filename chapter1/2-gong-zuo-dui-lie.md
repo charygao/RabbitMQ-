@@ -258,7 +258,7 @@ With spring-amqp there are reasonable default values in the MessageProperties th
 >
 > Marking messages as persistent doesn't fully guarantee that a message won't be lost. Although it tells RabbitMQ to save the message to disk, there is still a short time window when RabbitMQ has accepted a message and hasn't saved it yet. Also, RabbitMQ doesn't do fsync\(2\) for every message -- it may be just saved to cache and not really written to the disk. The persistence guarantees aren't strong, but it's more than enough for our simple task queue. If you need a stronger guarantee then you can use publisher confirms.
 >
-> 将消息标记为持久化并不能完全保证消息将不会丢失。虽然它告诉RabbitMQ要将消息保存到磁盘，但从RabbitMQ接收消息到将这条消息发送出去仍有一个小的时间窗口。而且，RabbitMQ不会为每条消息都进行fsync操作——它可能仅仅只是将其缓存起来，但并没有真的将消息写入磁盘。这么做虽然无法完全保证持久化，但对于我们简单的任务队列来说，这已经很足够了。如果你需要完全保证持久化，那么你可以使用发布者确认。
+> 将消息标记为持久化并不能完全保证消息将不会丢失。虽然它告诉RabbitMQ要将消息保存到磁盘，但当RabbitMQ接收了某条消息并且还没有保存该消息时，仍有一个小的时间窗口。而且，RabbitMQ不会为每条消息都进行fsync操作——它可能仅仅只是将其缓存起来，但并没有真的将消息写入磁盘。这么做虽然无法完全保证持久化，但对于我们简单的任务队列来说，这已经很足够了。如果你需要完全保证持久化，那么你可以使用发布者确认。
 
 ### Fair dispatch vs Round-robin dispatching（公平调度vs循环调度）
 
@@ -268,7 +268,7 @@ By default, RabbitMQ will send each message to the next consumer, in sequence. O
 
 This happens because RabbitMQ just dispatches a message when the message enters the queue. It doesn't look at the number of unacknowledged messages for a consumer. It just blindly dispatches every n-th message to the n-th consumer.
 
-会发生这个情况是因为，当消息进入队列时，RabbitMQ仅仅是将消息分派出去。它并考虑某个消费者未确认的消息的数量。它只是盲目地将消息均匀分派给各个消费者。
+会发生这个情况是因为，当消息进入队列时，RabbitMQ仅仅是将消息分派出去。它不会去看某个消费者未确认的消息的数量。它只是盲目地将消息均匀分派给各个消费者。
 
 However, "Fair dispatch" is the default configuration for spring-amqp. The SimpleMessageListenerContainer defines the value for DEFAULT\_PREFETCH\_COUNT to be 1. If the DEFAULT\_PREFECTH\_COUNT were set to 0 the behavior would be round robin messaging as described above.
 
@@ -288,11 +288,11 @@ However, with the prefetchCount set to 1 by default, this tells RabbitMQ not to 
 
 By using spring-amqp you get reasonable values configured for message acknowledgments and fair dispatching. The default durability for queues and persistence for messages provided by spring-amqp allow let the messages to survive even if RabbitMQ is restarted.
 
-通过使用spring-amqp，你将会获取为消息确认和公平调度配置的合理值。spring-amqp为队列和消息持久化提供的持久性使得即使在RabbitMQ重启的情况下，消息还能保存下来。
+通过使用spring-amqp，你会发现，它已经为消息确认和公平调度配置好合理值。spring-amqp为队列和消息持久化提供的默认持久属性使得即使在RabbitMQ重启的情况下，消息还能保存下来。
 
-For more information on Channel methods and MessageProperties, you can browse the javadocs online. For understanding the underlying foundation for spring-amqp you can find the rabbitmq-java-client.
+For more information on Channel methods and MessageProperties, you can browse the [javadocs online](http://docs.spring.io/spring-amqp/docs/current/api/index.html?org/springframework/amqp/package-summary.html). For understanding the underlying foundation for spring-amqp you can find the [rabbitmq-java-client](https://rabbitmq.github.io/rabbitmq-java-client/api/current/).
 
-关于channel方法和MessageProperties的更多信息，可以浏览在线的javadocs。若要了解spring-amqp的底层机制，可以参阅rabbitmq-java-client文档。
+关于channel方法和MessageProperties的更多信息，可以浏览[在线的javadocs](http://docs.spring.io/spring-amqp/docs/current/api/index.html?org/springframework/amqp/package-summary.html)。若要了解spring-amqp的底层机制，可以参阅[rabbitmq-java-client文档](https://rabbitmq.github.io/rabbitmq-java-client/api/current/)。
 
 Now we can move on to tutorial 3 and learn how to deliver the same message to many consumers.
 
