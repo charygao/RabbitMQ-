@@ -14,7 +14,7 @@ In our messaging system we might want to subscribe to not only queues based on t
 
 That example would give us a lot of flexibility - we may want to listen to just critical errors coming from 'cron' but also all logs from 'kern'.
 
-这个例子将给予我们很大便利性—我们可能想级别为严重错误的日志，而这些日志则同时来自“cron”和“kern”。
+这个例子将给予我们很大便利性—我们可能想监听级别为严重错误的日志，而且这些日志来自“cron”和“kern”。
 
 To implement that flexibility in our logging system we need to learn about a more complex topic exchange.
 
@@ -90,7 +90,7 @@ On the other hand "lazy.orange.male.rabbit", even though it has four words, will
 >
 > 当特殊符号“\*”（星号）和“\#”（哈希号）没有出现在绑定键时，主题交换器就表现得跟直接交换器一样。
 
-## Putting it all together
+## Putting it all together（代码整合）
 
 We're going to use a topic exchange in our messaging system. We'll start off with a working assumption that the routing keys will take advantage of both wildcards and a hash tag.
 
