@@ -12,7 +12,7 @@ In this tutorial we're going to add a feature to it - we're going to make it pos
 
 In previous examples we were already creating bindings. You may recall code like this in our Tut3Config file:
 
-在之前的例子当中，我们创建了绑定。通过下面的代码片段回顾下我们的Tut3Config配置文件：
+在之前的例子当中，我们创建了绑定器。通过下面的代码片段回顾下我们的Tut3Config配置文件：
 
 ```java
 @Bean
@@ -24,7 +24,7 @@ public Binding binding1(FanoutExchange fanout,
 
 A binding is a relationship between an exchange and a queue. This can be simply read as: the queue is interested in messages from this exchange.
 
-交换器和队列是通过绑定连结在一起的。这种关系可以读作：这个队列对这个交换器里的消息感兴趣。
+交换器和队列是通过绑定器连结在一起的。这种关系可以读作：这个队列对这个交换器里的消息感兴趣。
 
 Bindings can take an extra routingKey parameter. Spring-amqp uses a fluent API to make this relationship very clear. We pass in the exchange and queue into the BindingBuilder and simply bind the queue "to" the exchange "with a routing key" as follows:
 
@@ -56,7 +56,7 @@ We were using a fanout exchange, which doesn't give us much flexibility - it's o
 
 We will use a direct exchange instead. The routing algorithm behind a direct exchange is simple - a message goes to the queues whose binding key exactly matches the routing key of the message.
 
-我们将会使用直接交换器来替换它。直接交换器背后的路由算法很简单——当消息被推入到某个队列时，这个队列绑定的键要与消息的路由键完全匹配。
+我们将使用直连交换器来替换它。直连交换器背后的路由算法很简单——当消息被推入到某个队列时，这个队列绑定的键要与消息的路由键完全匹配。
 
 To illustrate that, consider the following setup:
 
@@ -66,7 +66,7 @@ To illustrate that, consider the following setup:
 
 In this setup, we can see the direct exchange X with two queues bound to it. The first queue is bound with binding key orange, and the second has two bindings, one with binding key black and the other one with green.
 
-从图中我们可以看到，有两个队列绑定了直接交换器X。第一个队列绑定时用了orange键，第二个队列用了两个，一个是black键，另一个是green键。
+从图中我们可以看到，有两个队列绑定了直连交换器X。第一个队列绑定时用了orange键，第二个队列用了两个，一个是black键，另一个是green键。
 
 In such a setup a message published to the exchange with a routing key orange will be routed to queue Q1. Messages with a routing key of black or green will go to Q2. All other messages will be discarded.
 
@@ -84,7 +84,7 @@ It is perfectly legal to bind multiple queues with the same binding key. In our 
 
 We'll use this model for our routing system. Instead of fanout we'll send messages to a direct exchange. We will supply the color as a routing key. That way the receiving program will be able to select the color it wants to receive \(or subscribe to\). Let's focus on sending messages first.
 
-我们将在我们的路由系统中使用这种模型。我们将发送消息给直接交换器，而不是广播交换器。我们将使用颜色作为路由键。这么做的话接收者程序就可以选择它想接收（或者说订阅）的颜色。让我们先看看如何发送消息。
+我们将在我们的路由系统中使用这种模型。我们将发送消息给直连交换器，而不是广播交换器。我们将使用颜色作为路由键。这么做的话接收者程序就可以选择它想接收（或者说订阅）的颜色。让我们先看看如何发送消息。
 
 As always, we do some spring boot configuration in Tut4Config:
 
@@ -105,7 +105,7 @@ And we're ready to send a message. Colors, as in the diagram, can be one of 'ora
 
 Receiving messages will work just like in the previous tutorial, with one exception - we're going to create a new binding for each color we're interested in. This also goes into the Tut4Config.
 
-
+接收消息将会像上一个教程那样，除了有一点不同——我们将为每一个我们感兴趣的颜色创建一个新的绑定器。这一点也将在Tut4Config里体现。
 
 ```java
 @Bean
@@ -122,11 +122,13 @@ public Binding binding1a(DirectExchange direct,
 }
 ```
 
-## Putting it all together
+## Putting it all together（整合代码）
 
 ![](https://www.rabbitmq.com/img/tutorials/python-four.png)
 
 As in the previous tutorials, create a new package for this tutorial called "tut4" and create the Tut4Config class. The code for Tut4Config.java class:
+
+像之前的教程那样，为本教程创建一个新的包目录“tut4”，并创建Tut4Config类。以下为TutConfig.java的代码：
 
 ```java
 import org.springframework.amqp.core.*;
@@ -204,6 +206,8 @@ public class Tut4Config {
 
 The code for our sender class is:
 
+我们的发送者类是这样的：
+
 ```java
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -241,6 +245,8 @@ public class Tut4Sender {
 ```
 
 The code for Tut4Receiver.java is:
+
+然后下面为Tut4Receiver.java的代码：
 
 ```java
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -281,11 +287,15 @@ public class Tut4Receiver {
 
 Compile as usual \(see tutorial one for maven compilation and executing the options from the jar\).
 
+像之前那样去编译（对于如何用maven进行编译以及如何通过参数来运行jar包，请见教程1）。
+
 ```
 mvn clean package
 ```
 
 In one terminal window you can run:
+
+打开一个终端窗口，运行以下命令：
 
 ```
 java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar 
@@ -293,7 +303,9 @@ java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar
     --tutorial.client.duration=60000
 ```
 
-and in the other temrinal window run the sender
+and in the other temrinal window run the sender：
+
+打开另一个终端窗口，输入以下命令来运行发送者：
 
 ```
 java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar 
@@ -303,5 +315,9 @@ java -jar target/rabbit-tutorials-1.7.1.RELEASE.jar
 
 Full source code for [Tut4Receiver.java source](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut4/Tut4Receiver.java) and [Tut4Sender.java source](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut4/Tut4Sender.java). The configuration is in[Tut4Config.java source](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut4/Tut4Config.java).
 
+完整的源代码可以参考[Tut4Receiver.java源码](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut4/Tut4Receiver.java)和[Tut4Sender.java源码](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut4/Tut4Sender.java)。配置类请参考[Tut4Config.java源码](https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/spring-amqp/src/main/java/org/springframework/amqp/tutorials/tut4/Tut4Config.java)
+
 Move on to tutorial 5 to find out how to listen for messages based on a pattern.
+
+下面开始教程5，看看如何基于主题来监听消息。
 
