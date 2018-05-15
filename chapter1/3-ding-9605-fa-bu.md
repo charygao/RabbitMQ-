@@ -44,13 +44,13 @@ RabbitMQ的消息队列模型的核心概念是：生产者从不直接往队列
 
 Instead, the producer can only send messages to an _exchange_. An exchange is a very simple thing. On one side it receives messages from producers and the other side it pushes them to queues. The exchange must know exactly what to do with a message it receives. Should it be appended to a particular queue? Should it be appended to many queues? Or should it get discarded. The rules for that are defined by the _exchange type_.
 
-与此相反，生产者只能将消息发送到一个交换器里。交换器做的事情很简单。一方面它接收生产者发送过来的消息，另一方面它将收到的消息推入队列里。交换器必须明确对于收到的消息它该怎么处理。这条消息是否应该附加到某个特定的队列后面？这条消息是否应该附加到多个队列后面？这条消息是否应该被丢弃？这些规则都有交换器类型（exchange type）来定义。
+与此相反，生产者只能将消息发送到一个交换器里。交换器做的事情很简单。一方面它接收生产者发送过来的消息，另一方面它将收到的消息推入队列里。交换器必须明确对于收到的消息它该怎么处理。这条消息是否应该附加到某个特定的队列后面？这条消息是否应该附加到多个队列后面？这条消息是否应该被丢弃？这些规则都由交换器类型（exchange type）来定义。
 
 ![](https://www.rabbitmq.com/img/tutorials/exchanges.png)
 
 There are a few exchange types available: direct, topic, headers and fanout. We'll focus on the last one -- the fanout. Let's configure a bean to describe an exchange of this type, and call it tut.fanout:
 
-有四种交换器类型可供我们选择：直接交换（direct），主体（topic），头部交换（headers）和广播（fanout）。我们将专注于最后一个——广播。我们先配置一个bean来描述这种类型的交换器，并把这个交换器命名为tut.fanout：
+有四种交换器类型可供我们选择：直接交换器（direct），主题交换器（topic），头部交换器（headers）和广播交换器（fanout）。我们将专注于最后一个——广播交换器。我们先配置一个bean来描述这种类型的交换器，并把这个交换器命名为tut.fanout：
 
 ```java
 import org.springframework.amqp.core.*;
@@ -108,7 +108,7 @@ public class Tut3Config {
 
 We ollow the same approach as in the previous two tutorials. We create three profiles, the tutorial \("tut3", "pub-sub", or "publish-subscribe"\). They are all synonyms for running the fanout profile tutorial. Next we configure the FanoutExchange as a bean. Within the "receiver" \(Tut3Receiver\) file we define four beans: two autoDeleteQueues or AnonymousQueues and two bindings to bind those queues to the exchange.
 
-我们采用了前面两个教程相同的方式。我们创建了三个配置，"tut3"，“pub-sub”，还有“publish-subscribe”。这三个配置在运行本教程时都是等效的。接下来我们会配置一个类型为FanoutExchange的bean。在“receiver”配置里，我们定义了四个bean：两个名字为autoDeleteQueue的AnonymousQueue以及两个将队列绑定到交换器binding。
+我们采用了与前面两个教程相同的方式。我们创建了三个配置组，"tut3"，“pub-sub”，或者叫“publish-subscribe”。这三个配置在运行本教程时都是等效的。接下来我们会配置一个类型为FanoutExchange的bean。在“receiver”配置组里，我们定义了四个bean：两个AnonymousQueue类型的队列，即autoDeleteQueue1和autoDeleteQueue2，及两个将队列绑定到交换器的绑定器（binding）。
 
 The fanout exchange is very simple. As you can probably guess from the name, it just broadcasts all the messages it receives to all the queues it knows. And that's exactly what we need for fanning out our messages.
 
@@ -126,7 +126,7 @@ The fanout exchange is very simple. As you can probably guess from the name, it 
 >
 > In this list there will be some amq.\* exchanges and the default \(unnamed\) exchange. These are created by default, but it is unlikely you'll need to use them at the moment.
 >
-> 在这个列表里，会出现一些类似于amq.\*的交换器，以及默认的（未命名）交换器。这些交换器都默认被创建，但这时你不一定会用到它们。
+> 在这个列表里，会出现一些类似于amq.开头的交换器，以及默认的（未命名）交换器。这些交换器都默认被创建，但这时你不一定会用到它们。
 >
 > #### Nameless exchange（匿名交换器）
 >
@@ -144,7 +144,7 @@ The fanout exchange is very simple. As you can probably guess from the name, it 
 >
 > The first parameter is the the name of the exchange that was autowired into the sender. The empty string denotes the default or _nameless_ exchange: messages are routed to the queue with the name specified by routingKey, if it exists.
 >
-> 第一个参数是被自动注入到发送者类的交换器的名字。空字符串表示该交换器是默认或者匿名的：
+> 第一个参数是被自动注入到发送者类的交换器的名字。空字符串表示该交换器是默认或者匿名的：如果路由键存在的话，消息则通过这个路由键名被路由到某个队列里：
 
 Now, we can publish to our named exchange instead:
 
@@ -351,6 +351,4 @@ The interpretation of the result is straightforward: data from exchange logs goe
 To find out how to listen for a subset of messages, let's move on to tutorial 4.
 
 接下来我们开始教程4，一起来看看如何监听部分消息。
-
-
 
