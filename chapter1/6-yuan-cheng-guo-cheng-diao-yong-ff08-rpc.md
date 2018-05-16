@@ -339,5 +339,5 @@ Our code is still pretty simplistic and doesn't try to solve more complex \(but 
 
 There is one other nice feature of RabbitMQ. It is featured as a supported tile on Pivotal Cloud Foundry \(PCF\) as a service.
 
-RabbitMQ还有另一个很棒的功能。它作为服务在Pivotal Cloud Foundry（PCF）上被支持。
+RabbitMQ还有另一个很棒的特性。它作为服务在Pivotal Cloud Foundry（PCF）上被支持。
 
