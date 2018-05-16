@@ -1,4 +1,4 @@
-## Remote procedure call \(RPC，远程过程调用\)
+## 先决条件Remote procedure call \(RPC，远程过程调用\)
 
 In the second tutorial we learned how to use _Work Queues_ to distribute time-consuming tasks among multiple workers.
 
@@ -72,7 +72,11 @@ Spring-amqp能让你专注于正在处理的消息类型，并隐藏了支持该
 
 That raises a new issue, having received a response in that queue it's not clear to which request the response belongs. That's when the correlationId property is used. Spring-amqp automatically sets a unique value for every request. In addition it handles the details of matching the response with the correct correlationId.
 
+但这会导致一个新的问题，那就是，对于从这个队列里接收的响应，我们无法知道它对应的是哪个请求。这时候，correlationId就派上用场了。spring-amqp自动帮我们为每一个请求设好了唯一的correlationId值。而且，它还帮我们做好了将响应与correlationId进行匹配的细节。
+
 One reason that spring-amqp makes rpc style easier is that sometimes you may want to ignore unknown messages in the callback queue, rather than failing with an error. It's due to a possibility of a race condition on the server side. Although unlikely, it is possible that the RPC server will die just after sending us the answer, but before sending an acknowledgment message for the request. If that happens, the restarted RPC server will process the request again. The spring-amqp client handles the duplicate responses gracefully, and the RPC should ideally be idempotent.
+
+spring-amqp使得rpc模式变得简单的一个原因是，有时你可能会想忽略回调队列里的一些未知消息，而不是抛出错误。这是因为服务端可能会出现竞争的情况。有可能RPC服务端在给我们发送完响应但却还没来得及发送确认消息时，它就挂了，虽然看起来不大像会这样。如果发生了这种情况，重启RPC服务端会继续再去处理这条请求。spring-amqp客户端会优雅地处理重复的响应，这种情况下，RPC应该是完美幂等的。
 
 ### Summary（总结）
 
