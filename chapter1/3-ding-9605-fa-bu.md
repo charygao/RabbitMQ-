@@ -1,4 +1,4 @@
-## Publish/Subscribe（发布/订阅）
+# Publish/Subscribe（发布/订阅）
 
 In the first tutorial we showed how to use start.spring.io to leverage Spring Initializr to create a project with the RabbitMQ starter dependency for create spring-amqp applications.
 

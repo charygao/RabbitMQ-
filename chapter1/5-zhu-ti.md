@@ -1,4 +1,4 @@
-## Topics（主题）
+# Topics（主题）
 
 In the previous tutorial we improved our messaging flexibility. Instead of using a fanout exchange only capable of dummy broadcasting, we used a direct one, and gained a possibility of selectively receiving the message based on the routing key.
 

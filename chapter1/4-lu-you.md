@@ -1,4 +1,4 @@
-## Routing（路由）
+# Routing（路由）
 
 In the previous tutorial we built a simple fanout exchange. We were able to broadcast messages to many receivers.
 
